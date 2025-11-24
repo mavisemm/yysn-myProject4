@@ -1,0 +1,396 @@
+/* 优化后的nyAuto页面样式 */
+// @import '../autoExamine.less';
+@import '../style.less';
+
+/* 主容器样式优化 */
+.nyAutoContainer {
+    width: 100%;
+    height: calc(100vh - 50px); /* 减去顶部导航栏高度 */
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 5px;
+    // padding: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* 三列布局响应式优化 */
+.column {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    background: rgba(2, 26, 32, 0.8);
+    border-radius: 10px;
+    border: 1px solid #1E4E5D;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(72, 184, 247, 0.1);
+}
+
+/* 响应式布局 - 中等屏幕 */
+@media (max-width: 1400px) {
+    .nyAutoContainer {
+        flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+    }
+    
+    .column {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 15px;
+    }
+}
+
+/* 响应式布局 - 小屏幕 */
+@media (max-width: 768px) {
+    .column {
+        height: 300px;
+    }
+    
+    .headStyle {
+        padding: 0 10px;
+    }
+    
+    .headStyle .logo {
+        width: 150px;
+    }
+    
+    .headStyle .headicon {
+        width: 150px;
+        margin-left: 10px;
+    }
+}
+
+/* 图表容器优化 */
+.chartContainer {
+    width: 100%;
+    height: calc(100% - 50px);
+    // padding: 10px;
+    box-sizing: border-box;
+}
+
+/* 标题栏优化 */
+.columnHeader {
+    width: 100%;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(90deg, #064452, #0A5A6C);
+    color: #07C8EE;
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid #3584B1;
+}
+
+/* 图表样式增强 */
+.echartsWidth {
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background: rgba(2, 26, 32, 0.5);
+    border: 1px solid #1E4E5D;
+}
+
+/* 悬停效果 */
+.column:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(72, 184, 247, 0.2);
+    border-color: #48B8F7;
+}
+
+/* 加载动画优化 */
+.loading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(2, 26, 32, 0.5);
+}
+
+.loadingTip {
+    color: #07C8EE;
+    font-size: 20px;
+    letter-spacing: 4px;
+    line-height: 40px;
+    margin-top: 20px;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* 顶部导航栏增强 */
+.headStyle {
+    position: relative;
+    overflow: hidden;
+}
+
+.headStyle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(72, 184, 247, 0.1), transparent);
+    animation: slide 6s ease-in-out infinite;
+}
+
+@keyframes slide {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+}
+
+/* 按钮样式增强 */
+.buttonStylezc {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.buttonStylezc:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px -8px 10px 2px rgba(81, 201, 225, 0.8);
+}
+
+.buttonStylezc:active {
+    transform: translateY(0);
+}
+
+/* 数据状态指示器 */
+.statusIndicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.statusNormal {
+    background-color: #52C41A;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.statusWarning {
+    background-color: #FAAD14;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.statusError {
+    background-color: #F5222D;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+/* 全屏模式优化 */
+.fullScreenzc {
+    background: rgba(2, 26, 32, 0.95);
+    backdrop-filter: blur(5px);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #064452;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3584B1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #48B8F7;
+}
+
+/* 数据文本样式优化 */
+.dataText {
+    color: white;
+    font-size: 14px;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+}
+
+.dataTextHighlight {
+    color: #07C8EE;
+    font-weight: 600;
+}
+
+/* 卡片阴影增强 */
+.pointGroup {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pointGroup:hover {
+    box-shadow: 0 4px 16px rgba(72, 184, 247, 0.2);
+}
+
+/* 选择框样式增强 */
+.select1, .select2, .select3 {
+    transition: all 0.3s ease;
+    background: linear-gradient(145deg, #455966, #3a4c57);
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 选择框背景渐变动画 */
+.select1::before, .select2::before, .select3::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(7, 200, 238, 0.1), transparent);
+    transition: all 0.8s ease;
+}
+
+.select1:hover::before, .select2:hover::before, .select3:hover::before {
+    left: 100%;
+}
+
+.select1:hover, .select2:hover, .select3:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px -8px 15px 2px rgba(81, 201, 225, 0.8);
+}
+
+.select1:focus, .select2:focus, .select3:focus {
+    border-color: #07C8EE;
+    box-shadow: 0 0 0 3px rgba(7, 200, 238, 0.3), 0px -8px 15px 2px rgba(81, 201, 225, 0.8);
+    outline: none;
+}
+
+/* 下拉菜单样式美化 */
+.select1 option, .select2 option, .select3 option {
+    transition: all 0.2s ease;
+    background: #064452;
+    border-bottom: 1px solid rgba(53, 132, 177, 0.3);
+}
+
+.select1 option:hover, .select2 option:hover, .select3 option:hover {
+    background: #1E4E5D;
+    color: #07C8EE;
+    transform: translateX(5px);
+}
+
+.select1 option:checked, .select2 option:checked, .select3 option:checked {
+    background: #3584B1;
+    color: white;
+    font-weight: 600;
+}
+
+/* Ant Design 选择框样式覆盖 */
+.ant-select-selector {
+    background: linear-gradient(145deg, #064452, #0A5A6C) !important;
+    border: 1px solid #3584B1 !important;
+    color: #07C8EE !important;
+    font-size: 16px !important;
+}
+
+.ant-select:hover .ant-select-selector {
+    border-color: #07C8EE !important;
+    box-shadow: 0 0 0 2px rgba(7, 200, 238, 0.2) !important;
+}
+
+.ant-select-focused .ant-select-selector {
+    border-color: #07C8EE !important;
+    box-shadow: 0 0 0 3px rgba(7, 200, 238, 0.3) !important;
+}
+
+.ant-select-item {
+    color: white !important;
+    background: #064452 !important;
+}
+
+.ant-select-item:hover {
+    background: #1E4E5D !important;
+    color: #07C8EE !important;
+}
+
+.ant-select-item-selected {
+    background: #3584B1 !important;
+    color: white !important;
+}
+
+.ant-select-arrow {
+    color: #07C8EE !important;
+}
+
+/* 输入框样式美化 */
+.InputStylezc {
+    transition: all 0.3s ease;
+    border: 1px solid #3584B1;
+    background: linear-gradient(145deg, #064452, #0A5A6C);
+    color: white;
+}
+
+.InputStylezc:focus {
+    border-color: #07C8EE;
+    box-shadow: 0 0 0 3px rgba(7, 200, 238, 0.3);
+    outline: none;
+}
+
+/* Ant Design 输入框样式覆盖 */
+.ant-input {
+    background: linear-gradient(145deg, #064452, #0A5A6C) !important;
+    border: 1px solid #3584B1 !important;
+    color: white !important;
+}
+
+.ant-input:hover {
+    border-color: #07C8EE !important;
+}
+
+.ant-input:focus {
+    border-color: #07C8EE !important;
+    box-shadow: 0 0 0 3px rgba(7, 200, 238, 0.3) !important;
+}
+
+
+// 子组件样式
+.echartsContentzc{
+    width: 100%;
+    display: flex;
+    justify-content:flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    .Contentzc{
+        width: 100%;
+        border-radius: 10px;
+        // margin: 5px 5px;
+        // padding:5px 5px;
+         span{
+            color:#3F9CD2;
+        }
+        .echartsWidth{
+            width: 100%;
+            height: 190px;
+        }
+        span{
+            text-align: center;
+            color: white;
+            font-size: 16px;
+        }
+    }
+}

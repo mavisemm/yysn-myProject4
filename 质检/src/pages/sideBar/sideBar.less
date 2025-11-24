@@ -1,0 +1,103 @@
+.sideBar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    background: #2C343F;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transition: width 0.3s ease;
+}
+
+body{
+    padding: 20px 10px;
+    box-sizing: border-box;
+
+    position: relative;
+    top: 0;
+    left: 200px; /* 与侧边栏宽度一致 */
+    width: calc(100% - 200px); /* 动态计算宽度 */
+    min-height: 100%;
+}
+
+/* 侧边栏头部样式 */
+.sidebarHeader {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1f2833;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #374151;
+}
+
+/* 菜单分组标题 */
+.menuGroupTitle {
+    padding: 12px 16px 8px;
+    color: #9ca3af;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* 菜单项容器 */
+.menuItems {
+    padding: 8px 0;
+}
+
+/* 全局样式 */
+:global{
+    /* 未选中菜单项 */
+    .sideBarName{
+        width: 100%;
+        height: 44px;
+        line-height: 44px;
+        font-size: 14px;
+        text-align: left;
+        padding: 0 20px;
+        color: #d1d5db;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        border-left: 3px solid transparent;
+        margin: 2px 0;
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-left-color: #3b82f6;
+        }
+    }
+    
+    /* 选中菜单项 */
+    .activesideBarName{
+        width: 100%;
+        height: 44px;
+        line-height: 44px;
+        font-size: 14px;
+        text-align: left;
+        padding: 0 20px;
+        color: #fff;
+        cursor: pointer;
+        background: #1e40af;
+        border-left: 3px solid #3b82f6;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 图标样式 */
+    .menuIcon {
+        margin-right: 12px;
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+    }
+}
+ 
+

@@ -1,0 +1,115 @@
+.body {
+    box-sizing: border-box;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+}
+*{
+    margin: 0 0;
+    padding: 0 0;
+}
+.typeFlex{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+}
+// loading
+.loading{
+    width: 400px;
+    height: 400px;
+    margin: 200px auto;
+    text-align: center;
+    div{
+        line-height: 50px;
+        font-size: 24px;
+    }
+}
+.headeright{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    img{
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+    }
+}
+.userFlex{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    span{
+        font-weight: 600;
+        font-size: 18px;
+    }
+}
+.wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 10px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+
+}
+.btnFile{
+    width: 100px;
+    color: white;
+    position: relative;
+    .fileStyle{
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        font-size: 0;
+    }
+}
+:global{
+    .content100{
+        width: 98%;
+        height: 100%;
+    }
+    .content0{
+        width: 2%;
+        display: none;
+    }
+    .content25{
+        width: 25%;
+        height: 100%;
+    }
+    .content74{
+        width: 74%;
+        height: 100%;
+    }
+}
+.openBar{
+    position: fixed;
+    top: 0;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    img{
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+    }
+
+}
+.modeFlex{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.modeFlex1{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}

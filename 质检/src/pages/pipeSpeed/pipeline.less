@@ -1,0 +1,24 @@
+/* 1. 清除默认样式，避免额外间距影响 */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* 2. 关键：设置body和html的高度，避免浏览器滚动条 */
+html, body {
+    height: 100%; /* 高度撑满浏览器可视区域 */
+    // overflow: hidden; /* 隐藏body的滚动条 */
+}
+
+/* 3. 页面容器样式调整：让容器自身滚动 */
+.body {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 10px;
+    height: 100%; /* 高度继承自body，即浏览器可视区域高度 */
+}
+.flex{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
