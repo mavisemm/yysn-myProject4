@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -24,7 +24,7 @@ let queryOperate = {
 let defaultNewItem = {
     id: '',
     name: '', //听音器名称
-    tenantName:''
+    tenantName: ''
 };
 
 
@@ -43,15 +43,15 @@ const initState = {
         // 编辑参数
         visible: false,
         loading: false,
-        
+
     },
     viewItem: {
         // 查看参数
         visible: false,
     },
-    soundList:[],//听音器列表
-    receiverList:[],//听筒列表
-    dataList:[]
+    soundList: [],//听音器列表
+    receiverList: [],//听筒列表
+    dataList: []
 };
 
 export default {
@@ -80,12 +80,12 @@ export default {
     effects: {
         // 获取列表
         *getList({ payload = {} }, { call, put, select }) {
-               let { pageSize, currentPage, queryParams } = yield select(
+            let { pageSize, currentPage, queryParams } = yield select(
                 ({ apiToken }) => apiToken,
             );
             currentPage = 'currentPage' in payload ? payload.currentPage : currentPage;
             pageSize = 'pageSize' in payload ? payload.pageSize : pageSize;
-            console.log(queryParams,'queryParams')
+            console.log(queryParams, 'queryParams')
             let filterPropertyMap = [
                 {
                     code: "tenantId",
@@ -102,7 +102,7 @@ export default {
                 filterPropertyMap: filterPropertyMap.filter(item => {
                     return item.value;
                 }),
-                pageIndex: currentPage -1,
+                pageIndex: currentPage - 1,
                 pageSize,
             }
             const data = yield call(service.getList, VtxUtil.handleTrim(params));
@@ -110,7 +110,7 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     dataSource = data.ret.items.map(item => ({
                         ...item,
@@ -118,7 +118,7 @@ export default {
                             ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
                             : '',
                         updateTime: item.updateTime ?
-                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
                             '',
                         key: item.id,
                     }));
@@ -138,25 +138,25 @@ export default {
         },
         // 获取租户列表
         *getTenatIdList({ payload = {} }, { call, put, select }) {
-    
+
         },
 
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ apiToken }) => apiToken);
+            const { newItem, editItem } = yield select(({ apiToken }) => apiToken);
             const {
                 clientId,
                 useCount,
                 tenantId,
-                tenantName,remark
-            } =  payload.btnType === 'add' ? newItem : editItem;
-            
-            let params = {clientId,useCount,tenantName,tenantId,remark}
+                tenantName, remark
+            } = payload.btnType === 'add' ? newItem : editItem;
+
+            let params = { clientId, useCount, tenantName, tenantId, remark }
 
             let data = '';
-            if (payload.btnType === 'add'){
+            if (payload.btnType === 'add') {
                 data = yield call(service.save, VtxUtil.handleTrim(params));
-            }else{
+            } else {
                 data = yield call(service.newsave, VtxUtil.handleTrim(params));
             }
             if (data && data.rc === 0) {

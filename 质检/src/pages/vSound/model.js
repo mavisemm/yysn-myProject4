@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -23,11 +23,11 @@ let queryOperate = {
 let defaultNewItem = {
     id: '',
     name: '', //听音器名称
-    degree:'0.2',
+    degree: '0.2',
     degree2: '0.4',
-    sectionRate:'0.33',
-    dist:'',
-    receiverList:[]
+    sectionRate: '0.33',
+    dist: '',
+    receiverList: []
 };
 
 const initState = {
@@ -52,7 +52,7 @@ const initState = {
 };
 
 export default {
-    namespace: 'vSound', 
+    namespace: 'vSound',
 
     state: { ...initState },
 
@@ -88,18 +88,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -116,14 +116,14 @@ export default {
 
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ vSound }) => vSound);
+            const { newItem, editItem } = yield select(({ vSound }) => vSound);
             const {
                 id,
                 name,
                 degree,
-                degree2,dist,
-                sectionRate,receiverList
-            } =  payload.btnType === 'add' ? newItem : editItem;
+                degree2, dist,
+                sectionRate, receiverList
+            } = payload.btnType === 'add' ? newItem : editItem;
             let params = {
                 id,
                 name,
@@ -135,9 +135,9 @@ export default {
                 dist
             };
             let data = '';
-            if (payload.btnType === 'add'){
+            if (payload.btnType === 'add') {
                 data = yield call(service.newsave, VtxUtil.handleTrim(params));
-            }else{
+            } else {
                 data = yield call(service.save, VtxUtil.handleTrim(params));
             }
             if (data && data.rc === 0) {

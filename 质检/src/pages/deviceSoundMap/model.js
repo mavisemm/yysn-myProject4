@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import moment from 'moment';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
@@ -11,7 +11,7 @@ const initState = {
     //     { key: 'PRODC', text: '生产设备' },
     //     { key: 'CHECK', text: '检测设备' },
     // ],
-    classList:[],
+    classList: [],
     typeList: [],
     deviceList: [],
 
@@ -21,9 +21,9 @@ const initState = {
     editPointInfo: {},
 
     detectorId: '',
-    pointId:"",
-    pointName:"",
-    detectorName:"",
+    pointId: "",
+    pointName: "",
+    detectorName: "",
 
     receiverId: '',
     machineId: '',
@@ -35,8 +35,8 @@ const initState = {
     mode: '',
     canAdd: false,
     canEdit: false,
-    imageid:"",
-    pointList:[],
+    imageid: "",
+    pointList: [],
 };
 
 export default {
@@ -66,20 +66,20 @@ export default {
     effects: {
         // 点位列表
         *getPointList({ payload = {} }, { call, put, select }) {
-             let params = {
+            let params = {
                 filterPropertyMap: [{
                     code: "tenantId",
                     operate: "EQ",
                     value: tenantId
                 }],
                 pageIndex: 0,
-                pageSize:1000,
+                pageSize: 1000,
             }
             const data = yield call(service1.getPointList, VtxUtil.handleTrim(params));
             let dataSource = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     dataSource = data.ret.items.map(item => ({
                         ...item,
@@ -88,7 +88,7 @@ export default {
                 }
             }
             let uState = {
-                pointList:dataSource,
+                pointList: dataSource,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });
@@ -106,7 +106,7 @@ export default {
             let dataSource = [],
                 status = false;
             if (data && data.rc === 0) {
-                if (data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     dataSource = data.ret.map(item => ({
                         ...item,
@@ -114,9 +114,9 @@ export default {
                     }));
                 }
             }
-            
+
             let uState = {
-                classList:dataSource,
+                classList: dataSource,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });
@@ -137,9 +137,9 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if (data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
-                    let  arr = data.ret;
+                    let arr = data.ret;
                     for (let i = 0; i < arr.length; i++) {
                         if (arr[i].machineList) {
                             machineList = machineList.concat(arr[i].machineList)
@@ -161,7 +161,7 @@ export default {
 
         // 管理
         *getPoints({ payload = {} }, { call, put, select }) {
-            const { machineId,receiverId} = yield select(({ deviceSoundMap }) => deviceSoundMap);
+            const { machineId, receiverId } = yield select(({ deviceSoundMap }) => deviceSoundMap);
             let params = {
                 machineId,
                 receiverId
@@ -184,7 +184,7 @@ export default {
         },
         // 根据机型获取
         *findByMachineId({ payload = {} }, { call, put, select }) {
-            const { machineId,receiverId} = yield select(({ deviceSoundMap }) => deviceSoundMap);
+            const { machineId, receiverId } = yield select(({ deviceSoundMap }) => deviceSoundMap);
             let params = {
                 machineId,
             };

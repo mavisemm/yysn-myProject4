@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -36,7 +36,7 @@ const initState = {
 
     machineRoomList: [], //机房
     machineList: [],
-    detailDtoList:[],
+    detailDtoList: [],
     currentPage: 1, // 页码
     pageSize: 10, // 每页条数
     loading: false, // 列表是否loading
@@ -54,7 +54,7 @@ const initState = {
         visible: false,
     },
     // 编辑子部件参数
-    treeItem: {...defaultTreeItem},
+    treeItem: { ...defaultTreeItem },
 };
 
 export default {
@@ -90,7 +90,7 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     dataSource = data.ret.map(item => ({
                         ...item,
@@ -127,8 +127,8 @@ export default {
 
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ vParams }) => vParams);
-  
+            const { newItem, editItem } = yield select(({ vParams }) => vParams);
+
             const {
                 id,
                 listenTime,
@@ -137,9 +137,9 @@ export default {
                 startFrequency,
                 endFrequency,
                 frequencyCount,
-                 detailDtoList, dbP
+                detailDtoList, dbP
 
-            } =  payload.btnType === 'add' ? newItem : editItem;
+            } = payload.btnType === 'add' ? newItem : editItem;
 
             let params = {
                 id,
@@ -150,7 +150,7 @@ export default {
                 startFrequency,
                 endFrequency,
                 frequencyCount,
-                 detailDtoList, dbP
+                detailDtoList, dbP
             };
             const data = yield call(service.save, VtxUtil.handleTrim(params));
             if (data && data.rc === 0) {

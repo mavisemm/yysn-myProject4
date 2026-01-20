@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1  } from './service';
+import { service, service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -24,10 +24,10 @@ let defaultNewItem = {
     id: '',
     name: '', //听音器名称
     machineIdList: [],
-    degree:'0.2',
+    degree: '0.2',
     degree2: '0.4',
-    sectionRate:'0.33',
-    machineName:""
+    sectionRate: '0.33',
+    machineName: ""
 };
 
 
@@ -98,18 +98,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.items.length != 0){
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.items.length != 0) {
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -123,16 +123,16 @@ export default {
                 payload: { ...uState },
             });
         },
-         // 获取机型列表
-         *getMachineList({ payload = {} }, { call, put, select }) {
+        // 获取机型列表
+        *getMachineList({ payload = {} }, { call, put, select }) {
             let params = {
                 tenantId
             };
-             let arr = [],
-              status = false;
+            let arr = [],
+                status = false;
             const data = yield call(service1.getMachineList, VtxUtil.handleTrim(params));
             if (data && data.rc === 0) {
-                 status = true;
+                status = true;
                 if ('ret' in data) {
                     for (let i = 0; i < data.ret.length; i++) {
                         if (data.ret[i].machineList) {
@@ -142,7 +142,7 @@ export default {
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });
@@ -154,8 +154,8 @@ export default {
 
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ sgStandardStore }) => sgStandardStore);
-            const {id,name,dbMax,dbMin,vibrationMax,vibrationMin,torqueMax,machineIdList,torqueMin,temperatureMax,temperatureMin,hydraulicMax,hydraulicMin,speed,power,detailDtoList} =  payload.btnType === 'add' ? newItem : editItem;
+            const { newItem, editItem } = yield select(({ sgStandardStore }) => sgStandardStore);
+            const { id, name, dbMax, dbMin, vibrationMax, vibrationMin, torqueMax, machineIdList, torqueMin, temperatureMax, temperatureMin, hydraulicMax, hydraulicMin, speed, power, detailDtoList } = payload.btnType === 'add' ? newItem : editItem;
             let params = {
                 id,
                 name,

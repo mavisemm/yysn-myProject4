@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 // import { service as machineRoomService } from '@src/pages/machineRoom/service';
 // import { service as machineService } from '@src/pages/machine/service';
@@ -22,7 +22,7 @@ export default {
 
     subscriptions: {
         setup({ dispatch, history }) {
-            return history.listen(({ pathname, search }) => {});
+            return history.listen(({ pathname, search }) => { });
         },
     },
 

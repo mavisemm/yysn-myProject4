@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import {
     VtxUtil
 } from '@src/utils/util';
@@ -214,11 +214,11 @@ export default {
                     code: 'tenantId',
                     operate: 'EQ',
                     value: tenantId,
-                }, ],
+                },],
                 sortValueMap: [{
                     code: 'sort',
                     sort: 'asc',
-                }, ],
+                },],
             }
             const data = yield call(service.getMode, VtxUtil.handleTrim(params));
             let qualityList = [],
@@ -254,15 +254,15 @@ export default {
         }) {
             let params = {
                 filterPropertyMap: [{
-                        code: "tenantId",
-                        operate: "EQ",
-                        value: tenantId
-                    },
-                    {
-                        code: "type",
-                        operate: "EQ",
-                        value: 0
-                    },
+                    code: "tenantId",
+                    operate: "EQ",
+                    value: tenantId
+                },
+                {
+                    code: "type",
+                    operate: "EQ",
+                    value: 0
+                },
                 ],
                 pageIndex: 0,
                 pageSize: 100,

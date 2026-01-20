@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -44,7 +44,7 @@ const initState = {
 };
 
 export default {
-    namespace: 'sampleLibraryCompare', 
+    namespace: 'sampleLibraryCompare',
 
     state: { ...initState },
 
@@ -77,8 +77,8 @@ export default {
             };
             let arr = [];
             const data = yield call(service.getMachineList, VtxUtil.handleTrim(params));
-                // total = 0,
-                status = false;
+            // total = 0,
+            status = false;
             if (data && data.rc === 0) {
                 if ('ret' in data) {
                     status = true;
@@ -90,7 +90,7 @@ export default {
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
                 // total,
             };
             // 请求成功 更新传入值
@@ -101,7 +101,7 @@ export default {
             });
         },
         // 获取点位列表
-         *getPointList({ payload = {} }, { call, put, select }) {
+        *getPointList({ payload = {} }, { call, put, select }) {
             let params = {
                 filterPropertyMap: [{
                     code: "tenantId",
@@ -110,23 +110,23 @@ export default {
                 }],
             }
             const data = yield call(service.getPointList, VtxUtil.handleTrim(params));
-             let arr = [];
+            let arr = [];
             let pointList = [],
                 // total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        pointList = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    pointList = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {

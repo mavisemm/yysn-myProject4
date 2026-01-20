@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -44,7 +44,7 @@ const initState = {
 };
 
 export default {
-    namespace: 'sgBoard', 
+    namespace: 'sgBoard',
 
     state: { ...initState },
 
@@ -83,34 +83,34 @@ export default {
                     status = true;
                     Source = [
                         {
-                            name:'今日检测总量',
+                            name: '今日检测总量',
                             number: data.ret.detectAmountToday,
-                            key:1
+                            key: 1
                         },
-                             {
-                            name:'今日机型品质优数量',
+                        {
+                            name: '今日机型品质优数量',
                             number: data.ret.excellenceAmountToday,
-                              key: 2
+                            key: 2
                         },
-                             {
-                            name:'今日机型品质不合格',
+                        {
+                            name: '今日机型品质不合格',
                             number: data.ret.defectsAmountToday,
-                              key: 3
+                            key: 3
                         },
-                             {
+                        {
                             name: '本月检测总量',
                             number: data.ret.detectAmountMonth,
-                              key: 4
+                            key: 4
                         },
-                             {
+                        {
                             name: '本月机型品质优数量',
                             number: data.ret.excellenceAmountMonth,
-                              key: 5
+                            key: 5
                         },
-                             {
+                        {
                             name: '本月机型品质不合格',
                             number: data.ret.defectsAmountMonth,
-                            key:6
+                            key: 6
                         },
 
                     ]

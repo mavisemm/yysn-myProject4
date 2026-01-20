@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service2 } from './service';
+import { service, service2 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -42,11 +42,11 @@ const initState = {
         visible: false,
     },
     qualityList: [],
-    deviationList:[]
+    deviationList: []
 };
 
 export default {
-    namespace: 'standardStoreHistory', 
+    namespace: 'standardStoreHistory',
 
     state: { ...initState },
 
@@ -81,11 +81,11 @@ export default {
             };
             let arr = [];
             const data = yield call(service.getMachineList, VtxUtil.handleTrim(params));
-                status = false;
+            status = false;
             if (data && data.rc === 0) {
                 if ('ret' in data) {
                     status = true;
-                    for (let i = 0;i<data.ret.length; i++) {
+                    for (let i = 0; i < data.ret.length; i++) {
                         if (data.ret[i].machineList) {
                             arr = arr.concat(data.ret[i].machineList)
                         }
@@ -93,7 +93,7 @@ export default {
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });
@@ -103,13 +103,13 @@ export default {
             });
         },
         // 获取点位列表
-         *getPointList({ payload = {} }, { call, put, select }) {
+        *getPointList({ payload = {} }, { call, put, select }) {
             let params = {
-               filterPropertyMap: [{
-                   code: "tenantId",
-                   operate: "EQ",
-                   value: tenantId
-               }],
+                filterPropertyMap: [{
+                    code: "tenantId",
+                    operate: "EQ",
+                    value: tenantId
+                }],
                 sortValueMap: [{
                     code: 'point_name',
                     sort: 'asc'
@@ -120,18 +120,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        pointList = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    pointList = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -145,24 +145,24 @@ export default {
                 payload: { ...uState },
             });
         },
-          // 获取品质等级列表
+        // 获取品质等级列表
         *getMode({ payload = {} }, { call, put, select }) {
-           let params = {
-                  filterPropertyMap: [{
-                      code: 'tenantId',
-                      operate: 'EQ',
-                      value: tenantId,
-                  }, ],
-                  sortValueMap: [{
-                      code: 'sort',
-                      sort: 'asc',
-                  }, ],
-              }
+            let params = {
+                filterPropertyMap: [{
+                    code: 'tenantId',
+                    operate: 'EQ',
+                    value: tenantId,
+                },],
+                sortValueMap: [{
+                    code: 'sort',
+                    sort: 'asc',
+                },],
+            }
             const data = yield call(service.getMode, VtxUtil.handleTrim(params));
             let qualityList = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     qualityList = data.ret.items || []
                 }
@@ -177,7 +177,7 @@ export default {
                 payload: { ...uState },
             });
         },
-         // 偏离度列表
+        // 偏离度列表
         *getDeviationList({ payload = {} }, { call, put, select }) {
             let params = {
                 filterPropertyMap: [
@@ -191,24 +191,24 @@ export default {
                         operate: "EQ",
                         value: 0
                     },
-            ],
-                pageIndex:0,
-                pageSize:100,
+                ],
+                pageIndex: 0,
+                pageSize: 100,
             }
             const data = yield call(service2.getList, VtxUtil.handleTrim(params));
             let dataSource = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
-                deviationList:dataSource,
+                deviationList: dataSource,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });

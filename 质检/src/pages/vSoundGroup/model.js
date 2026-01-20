@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -29,9 +29,9 @@ let defaultNewItem = {
 const initState = {
     searchParams: { ...initQueryParams }, // 搜索参数
     queryParams: { ...initQueryParams }, // 查询列表参数
-    detailDtoListARR:[],//绑定听音器列表
+    detailDtoListARR: [],//绑定听音器列表
     receiverList: [],
-    soundList:[],//听音器列表
+    soundList: [],//听音器列表
     currentPage: 1, // 页码
     pageSize: 10, // 每页条数
     loading: false, // 列表是否loading
@@ -88,18 +88,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -123,22 +123,22 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
-                soundList:dataSource,
+                soundList: dataSource,
                 total,
             };
             // 请求成功 更新传入值
@@ -150,19 +150,19 @@ export default {
         },
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ vSoundGroup }) => vSoundGroup);
+            const { newItem, editItem } = yield select(({ vSoundGroup }) => vSoundGroup);
             const {
                 id,
                 name,
                 detailDtoListARR
-            } =  payload.btnType === 'add' ? newItem : editItem;
+            } = payload.btnType === 'add' ? newItem : editItem;
             let params = {
                 id,
                 name,
                 tenantId,
-                detailDtoList:detailDtoListARR
+                detailDtoList: detailDtoListARR
             };
-           const data = yield call(service.save, VtxUtil.handleTrim(params));
+            const data = yield call(service.save, VtxUtil.handleTrim(params));
             if (data && data.rc === 0) {
                 yield put({ type: 'getList' });
                 payload.onSuccess();

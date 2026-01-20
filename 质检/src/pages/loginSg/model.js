@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -44,12 +44,12 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                    status = true;
-                    dataSource ={
-                        groupList: data.ret.item.groupList || [],
-                        soundDetector: data.ret.item.soundDetector || [],
-                    };
-                    total = data.ret.rowCount;
+                status = true;
+                dataSource = {
+                    groupList: data.ret.item.groupList || [],
+                    soundDetector: data.ret.item.soundDetector || [],
+                };
+                total = data.ret.rowCount;
             }
             let uState = {
                 dataSource,

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import {
     VtxUtil
 } from '@src/utils/util';
@@ -87,26 +87,26 @@ export default {
                     dispatch({
                         type: 'getMode'
                     });
-    
+
                 }
             });
         },
     },
 
     effects: {
-  
+
         // 获取品质等级列表
-        * getMode({payload = {}}, {call,put,select}) {
+        * getMode({ payload = {} }, { call, put, select }) {
             let params = {
                 filterPropertyMap: [{
                     code: 'tenantId',
                     operate: 'EQ',
                     value: tenantId,
-                }, ],
+                },],
                 sortValueMap: [{
                     code: 'sort',
                     sort: 'asc',
-                }, ],
+                },],
             }
             const data = yield call(service.getMode, VtxUtil.handleTrim(params));
             let qualityList = [],

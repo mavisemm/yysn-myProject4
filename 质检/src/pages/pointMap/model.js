@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import moment from 'moment';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
@@ -11,7 +11,7 @@ const initState = {
     //     { key: 'PRODC', text: '生产设备' },
     //     { key: 'CHECK', text: '检测设备' },
     // ],
-    classList:[],
+    classList: [],
     typeList: [],
     machineList: [],
 
@@ -21,9 +21,9 @@ const initState = {
     editPointInfo: {},
 
     detectorId: '',
-    pointId:"",
-    pointName:"",
-    detectorName:"",
+    pointId: "",
+    pointName: "",
+    detectorName: "",
 
     machineId: '',
     machineName: "",
@@ -31,13 +31,13 @@ const initState = {
     machinePointFileName: "",
     machinePointFilePath: "",
     machinePointFileUrl: "",
-    machinePhotoId:'',
+    machinePhotoId: '',
     mode: '',
     canAdd: false,
     canEdit: false,
-    imageid:"",
-    photoDtoList:[],
-    sort:""
+    imageid: "",
+    photoDtoList: [],
+    sort: ""
 };
 
 export default {
@@ -74,9 +74,9 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if (data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
-                    let  arr = data.ret;
+                    let arr = data.ret;
                     for (let i = 0; i < arr.length; i++) {
                         if (arr[i].machineList) {
                             machineList = machineList.concat(arr[i].machineList)
@@ -98,7 +98,7 @@ export default {
 
         // 管理
         *getPoints({ payload = {} }, { call, put, select }) {
-            const { machineId,pointId,machinePhotoId} = yield select(({ pointMap }) => pointMap);
+            const { machineId, pointId, machinePhotoId } = yield select(({ pointMap }) => pointMap);
             let params = {
                 machineId,
                 pointId,
@@ -122,7 +122,7 @@ export default {
         },
         // 根据机型获取
         *findByMachineId({ payload = {} }, { call, put, select }) {
-            const { machineId,machinePhotoId} = yield select(({ pointMap }) => pointMap);
+            const { machineId, machinePhotoId } = yield select(({ pointMap }) => pointMap);
             let params = {
                 machineId,
                 machinePhotoId
@@ -192,7 +192,7 @@ export default {
         updateState(state, action) {
             return u(action.payload, state);
         },
-        
+
         updateQueryParams(state, action) {
             let queryParams = _.pick(state.searchParams, _.keys(initQueryParams));
             return {

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -24,7 +24,7 @@ let defaultNewItem = {
     id: '',
     groupName: '', //点位组名称
     detailDtoList: [],
-    machineName:''
+    machineName: ''
 };
 
 
@@ -43,14 +43,14 @@ const initState = {
         // 编辑参数
         visible: false,
         loading: false,
-        
+
     },
     viewItem: {
         // 查看参数
         visible: false,
     },
-    pointList:[],//点位列表
-    machineList:[],//机型列表
+    pointList: [],//点位列表
+    machineList: [],//机型列表
 };
 
 export default {
@@ -84,15 +84,15 @@ export default {
             currentPage = 'currentPage' in payload ? payload.currentPage : currentPage;
             pageSize = 'pageSize' in payload ? payload.pageSize : pageSize;
             let filterPropertyMap = [{
-                    code: "tenantId",
-                    operate: "EQ",
-                    value: tenantId
-                },
-                {
-                    code: 'group_name',
-                    operate: 'LIKE',
-                    value: queryParams.groupName,
-                },
+                code: "tenantId",
+                operate: "EQ",
+                value: tenantId
+            },
+            {
+                code: 'group_name',
+                operate: 'LIKE',
+                value: queryParams.groupName,
+            },
             ];
             let params = {
                 filterPropertyMap: filterPropertyMap.filter(item => {
@@ -106,18 +106,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -146,17 +146,17 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        pointList = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime ?
-                                moment(item.createTime).format('YYYY-MM-DD HH:mm:ss') :
-                                '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') : '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    pointList = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime ?
+                            moment(item.createTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') : '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -184,8 +184,8 @@ export default {
                 if ('ret' in data) {
                     status = true;
                     arr = data.ret;
-                    for(let i = 0;i<arr.length;i++){
-                        if(arr[i].machineList){
+                    for (let i = 0; i < arr.length; i++) {
+                        if (arr[i].machineList) {
                             machineList = machineList.concat(arr[i].machineList)
                         }
                     }
@@ -204,14 +204,14 @@ export default {
         },
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ pointGroupManage }) => pointGroupManage);
+            const { newItem, editItem } = yield select(({ pointGroupManage }) => pointGroupManage);
             const {
                 id,
                 groupName,
                 machineId,
                 detailDtoList,
-            } =  payload.btnType === 'add' ? newItem : editItem;
-      
+            } = payload.btnType === 'add' ? newItem : editItem;
+
             let params = {
                 id,
                 groupName,
@@ -221,9 +221,9 @@ export default {
             }
 
             let data = '';
-            if (payload.btnType === 'add'){
+            if (payload.btnType === 'add') {
                 data = yield call(service.save, VtxUtil.handleTrim(params));
-            }else{
+            } else {
                 data = yield call(service.newsave, VtxUtil.handleTrim(params));
             }
             if (data && data.rc === 0) {

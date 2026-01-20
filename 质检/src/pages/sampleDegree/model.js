@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -29,10 +29,10 @@ let defaultNewItem = {
     gamma: '0.8',
     bj: "0.9",
     kaoshi: "2",
-    dbP:"1.0",
+    dbP: "1.0",
     freqQ: "1.5",
     alpha: '0.5',
-    r:"1"
+    r: "1"
 };
 
 
@@ -86,8 +86,8 @@ export default {
     },
 
     effects: {
-         // 获取机型列表
-         *getMachineList({ payload = {} }, { call, put, select }) {
+        // 获取机型列表
+        *getMachineList({ payload = {} }, { call, put, select }) {
             let { pageSize, currentPage, queryParams } = yield select(
                 ({ sampleDegree }) => sampleDegree,
             );
@@ -96,8 +96,8 @@ export default {
             };
             let arr = [];
             const data = yield call(service1.getMachineList, VtxUtil.handleTrim(params));
-                // total = 0,
-                status = false;
+            // total = 0,
+            status = false;
             if (data && data.rc === 0) {
                 if ('ret' in data) {
                     status = true;
@@ -105,24 +105,24 @@ export default {
                         let temp = data.ret[i];
                         let children = [];
                         if (temp.machineList) {
-                            for(let j = 0;j<temp.machineList.length;j++){
+                            for (let j = 0; j < temp.machineList.length; j++) {
                                 children.push({
-                                    title:temp.machineList[j].name,
-                                    key:temp.machineList[j].id,
+                                    title: temp.machineList[j].name,
+                                    key: temp.machineList[j].id,
                                 })
                             }
                         }
                         arr[i] = {
-                            title:temp.name,
-                            key:temp.id,
-                            disableCheckbox:true,
-                            children:children
+                            title: temp.name,
+                            key: temp.id,
+                            disableCheckbox: true,
+                            children: children
                         }
                     }
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
                 // total,
             };
             // 请求成功 更新传入值
@@ -150,10 +150,10 @@ export default {
                     {
                         code: "type",
                         operate: "EQ",
-                        value:  1
+                        value: 1
                     },
                 ],
-                pageIndex: currentPage -1,
+                pageIndex: currentPage - 1,
                 pageSize,
             }
             const data = yield call(service.getList, VtxUtil.handleTrim(params));
@@ -161,18 +161,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -189,24 +189,24 @@ export default {
 
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ sampleDegree }) => sampleDegree);
+            const { newItem, editItem } = yield select(({ sampleDegree }) => sampleDegree);
             const {
                 id,
-                name, 
-                startFreq, 
-                endFreq, 
-                freqCount, 
-                kaoshi, 
+                name,
+                startFreq,
+                endFreq,
+                freqCount,
+                kaoshi,
                 bj,
                 dbCount,
-                dbP, 
+                dbP,
                 freqQ,
-                gamma, 
+                gamma,
                 alpha,
                 r,
                 detailDtoList,
-            } =  payload.btnType === 'add' ? newItem : editItem;
-           
+            } = payload.btnType === 'add' ? newItem : editItem;
+
             let params = {
                 id,
                 name,

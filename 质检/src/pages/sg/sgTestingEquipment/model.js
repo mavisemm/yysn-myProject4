@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -23,11 +23,11 @@ let queryOperate = {
 let defaultNewItem = {
     id: '',
     name: '', //听音器名称
-    y:"",
-    z:"",
-    degree:'0.2',
+    y: "",
+    z: "",
+    degree: '0.2',
     degree2: '0.4',
-    sectionRate:'0.33',
+    sectionRate: '0.33',
     type: "",
 };
 
@@ -46,19 +46,19 @@ const initState = {
     total: 0, // 列表总条数
     selectedRowKeys: [],
     newItem: { ...defaultNewItem },
-    newItemOne:{...defaultNewItem},
+    newItemOne: { ...defaultNewItem },
     editItem: {
         // 编辑参数
         visible: false,
         loading: false,
         receiverList: [],
-        type:""
+        type: ""
     },
     editItemOne: {
         // 编辑参数
         visible: false,
         loading: false,
-      name:"",
+        name: "",
         type: ""
     },
     viewItem: {
@@ -100,18 +100,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -128,11 +128,11 @@ export default {
 
         // 声音设备新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ sgTestingEquipment }) => sgTestingEquipment);
-            const {id,name,degree,degree2,sectionRate,} =  payload.btnType === 'add' ? newItem : editItem;
+            const { newItem, editItem } = yield select(({ sgTestingEquipment }) => sgTestingEquipment);
+            const { id, name, degree, degree2, sectionRate, } = payload.btnType === 'add' ? newItem : editItem;
             let newreceiverList = [];
             let receiverList = [];
-            if(localStorage.receiverList){
+            if (localStorage.receiverList) {
                 receiverList = JSON.parse(localStorage.receiverList)
             }
             for (let i = 0; i < receiverList.length; i++) {
@@ -148,22 +148,22 @@ export default {
                 degree,
                 degree2,
                 sectionRate,
-                receiverList:newreceiverList
+                receiverList: newreceiverList
             };
-            
+
             let newParams = {
-                receiverList:newreceiverList,
+                receiverList: newreceiverList,
                 name,
                 tenantId,
                 degree,
                 degree2,
                 sectionRate,
-                type:'SOUND'
+                type: 'SOUND'
             }
             let data = '';
-            if (payload.btnType === 'add'){
+            if (payload.btnType === 'add') {
                 data = yield call(service.addSave, VtxUtil.handleTrim(newParams));
-            }else{
+            } else {
                 data = yield call(service.editSave, VtxUtil.handleTrim(params));
             }
             if (data && data.rc === 0) {
@@ -175,24 +175,24 @@ export default {
         },
         // 振动、红外新增
         *saveOrUpdateOne({ payload }, { call, put, select }) {
-            const {newItemOne, editItemOne } = yield select(({ sgTestingEquipment }) => sgTestingEquipment);
-            const {id,name,type} = payload.btnType === 'add' ? newItemOne : editItemOne ;
+            const { newItemOne, editItemOne } = yield select(({ sgTestingEquipment }) => sgTestingEquipment);
+            const { id, name, type } = payload.btnType === 'add' ? newItemOne : editItemOne;
             let params = {
                 id,
                 name,
                 tenantId,
                 type,
             };
-            
+
             let newParams = {
                 name,
                 tenantId,
                 type
             }
             let data = '';
-            if (payload.btnType === 'add'){
+            if (payload.btnType === 'add') {
                 data = yield call(service.addSave, VtxUtil.handleTrim(newParams));
-            }else{
+            } else {
                 data = yield call(service.editSave, VtxUtil.handleTrim(params));
             }
             if (data && data.rc === 0) {

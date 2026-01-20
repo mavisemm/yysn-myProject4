@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -34,7 +34,7 @@ const initState = {
     selectedRowKeys: [],
     editItem: {
         // 编辑参数
-        name:'',
+        name: '',
         visible: false,
         loading: false,
     },
@@ -42,11 +42,11 @@ const initState = {
         // 查看参数
         visible: false,
     },
-    groupname:""
+    groupname: ""
 };
 
 export default {
-    namespace: 'voiceMachineModel', 
+    namespace: 'voiceMachineModel',
 
     state: { ...initState },
 
@@ -78,7 +78,7 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if (data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     dataSource = data.ret.map(item => ({
                         ...item,

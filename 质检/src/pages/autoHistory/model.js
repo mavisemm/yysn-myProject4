@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service2 } from './service';
+import { service, service2 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -42,11 +42,11 @@ const initState = {
         visible: false,
     },
     qualityList: [],
-    deviationList:[]
+    deviationList: []
 };
 
 export default {
-    namespace: 'autoHistory', 
+    namespace: 'autoHistory',
 
     state: { ...initState },
 
@@ -70,22 +70,22 @@ export default {
     effects: {
         // 获取品质等级列表
         *getMode({ payload = {} }, { call, put, select }) {
-           let params = {
-                  filterPropertyMap: [{
-                      code: 'tenantId',
-                      operate: 'EQ',
-                      value: tenantId,
-                  }, ],
-                  sortValueMap: [{
-                      code: 'sort',
-                      sort: 'asc',
-                  }, ],
-              }
+            let params = {
+                filterPropertyMap: [{
+                    code: 'tenantId',
+                    operate: 'EQ',
+                    value: tenantId,
+                },],
+                sortValueMap: [{
+                    code: 'sort',
+                    sort: 'asc',
+                },],
+            }
             const data = yield call(service.getMode, VtxUtil.handleTrim(params));
             let qualityList = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     qualityList = data.ret.items || []
                 }
@@ -100,7 +100,7 @@ export default {
                 payload: { ...uState },
             });
         },
-  
+
 
     },
 

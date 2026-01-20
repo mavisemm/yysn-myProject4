@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -41,10 +41,10 @@ const initState = {
         // 查看参数
         visible: false,
     },
-    qualityList:[]
+    qualityList: []
 };
 export default {
-    namespace: 'voiceleaderBoard', 
+    namespace: 'voiceleaderBoard',
     state: { ...initState },
     subscriptions: {
         setup({ dispatch, history }) {
@@ -64,18 +64,18 @@ export default {
     },
 
     effects: {
-         // 获取品质等级列表
-        *getMode({payload = {}}, {call,put,select}) {
+        // 获取品质等级列表
+        *getMode({ payload = {} }, { call, put, select }) {
             let params = {
                 filterPropertyMap: [{
                     code: 'tenantId',
                     operate: 'EQ',
                     value: tenantId,
-                }, ],
+                },],
                 sortValueMap: [{
                     code: 'sort',
                     sort: 'asc',
-                }, ],
+                },],
             }
             const data = yield call(service1.getMode, VtxUtil.handleTrim(params));
             let qualityList = [],

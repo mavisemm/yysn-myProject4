@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -41,11 +41,11 @@ const initState = {
         // 查看参数
         visible: false,
     },
-    soundList:[]
+    soundList: []
 };
 
 export default {
-    namespace: 'sgCompare', 
+    namespace: 'sgCompare',
 
     state: { ...initState },
 
@@ -85,7 +85,7 @@ export default {
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
                 // total,
             };
             // 请求成功 更新传入值
@@ -96,7 +96,7 @@ export default {
             });
         },
         // 获取听音器列表
-         *getSoundList({ payload = {} }, { call, put, select }) {
+        *getSoundList({ payload = {} }, { call, put, select }) {
             let params = {
                 tenantId
             }
@@ -104,17 +104,17 @@ export default {
             let dataSource = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        for(let i =0 ;i<data.ret.length;i++){
-                            if(data.ret[i].type == 'SOUND'){
-                                dataSource = dataSource.concat(data.ret[i]?.receiverList || []);
-                            }
+                if (data.ret.length != 0) {
+                    status = true;
+                    for (let i = 0; i < data.ret.length; i++) {
+                        if (data.ret[i].type == 'SOUND') {
+                            dataSource = dataSource.concat(data.ret[i]?.receiverList || []);
                         }
+                    }
                 }
             }
             let uState = {
-                soundList:dataSource,
+                soundList: dataSource,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });

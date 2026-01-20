@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -24,7 +24,7 @@ let defaultNewItem = {
     id: '',
     name: '', //听音器名称
     type: "",
-    detailDtoList:[]
+    detailDtoList: []
 };
 
 const initState = {
@@ -38,13 +38,13 @@ const initState = {
     total: 0, // 列表总条数
     selectedRowKeys: [],
     newItem: { ...defaultNewItem },
-    newItemOne:{...defaultNewItem},
+    newItemOne: { ...defaultNewItem },
     editItem: {
         // 编辑参数
         visible: false,
         loading: false,
         detailDtoList: [],
-        type:""
+        type: ""
     },
     viewItem: {
         // 查看参数
@@ -70,7 +70,7 @@ export default {
                     });
                     dispatch({ type: 'getList' });
                     dispatch({ type: 'getEquipmentList' });
-                    
+
                 }
             });
         },
@@ -79,13 +79,13 @@ export default {
     effects: {
         // 获取列表
         *getList({ payload = {} }, { call, put, select }) {
-              let {pageSize, currentPage, queryParams} = yield select(({sgTestingPlat}) => sgTestingPlat);
+            let { pageSize, currentPage, queryParams } = yield select(({ sgTestingPlat }) => sgTestingPlat);
             currentPage = 'currentPage' in payload ? payload.currentPage : currentPage;
             pageSize = 'pageSize' in payload ? payload.pageSize : pageSize;
 
             let filterPropertyMap = [];
-            for(let key in queryParams) {
-                if(queryOperate[key]) {
+            for (let key in queryParams) {
+                if (queryOperate[key]) {
                     filterPropertyMap.push({
                         code: key,
                         operate: queryOperate[key],
@@ -99,7 +99,7 @@ export default {
                 value: tenantId
             })
             let params = {
-                filterPropertyMap:filterPropertyMap.filter((item)=>{return item.value}),
+                filterPropertyMap: filterPropertyMap.filter((item) => { return item.value }),
                 pageIndex: currentPage - 1,
                 pageSize,
             };
@@ -109,17 +109,17 @@ export default {
                 status = false;
             if (data && data.rc === 0) {
                 if (data.ret.items.length != 0) {
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -142,22 +142,22 @@ export default {
             let dataSource = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
-                equipmentList:dataSource,
+                equipmentList: dataSource,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });
@@ -168,9 +168,9 @@ export default {
         },
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ sgTestingPlat }) => sgTestingPlat);
-            const {id,name,detailDtoList} =  payload.btnType === 'add' ? newItem : editItem;
-   
+            const { newItem, editItem } = yield select(({ sgTestingPlat }) => sgTestingPlat);
+            const { id, name, detailDtoList } = payload.btnType === 'add' ? newItem : editItem;
+
             let params = {
                 id,
                 name,

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
 import { service } from './service';
 import { vtxInfo } from '@src/utils/config';
@@ -23,11 +23,11 @@ let queryOperate = {
 let defaultNewItem = {
     id: '',
     name: '', //听音器名称
-    machineId:"",
-    detectorId:"",
-    receiverId:'',
-    receiverName:'',
-    detectorName:''
+    machineId: "",
+    detectorId: "",
+    receiverId: '',
+    receiverName: '',
+    detectorName: ''
 };
 
 
@@ -46,15 +46,15 @@ const initState = {
         // 编辑参数
         visible: false,
         loading: false,
-        
+
     },
     viewItem: {
         // 查看参数
         visible: false,
     },
-    soundList:[],//听音器列表
-    receiverList:[],//听筒列表
-    dataList:[]
+    soundList: [],//听音器列表
+    receiverList: [],//听筒列表
+    dataList: []
 };
 
 export default {
@@ -82,7 +82,7 @@ export default {
     effects: {
         // 获取列表
         *getList({ payload = {} }, { call, put, select }) {
-               let { pageSize, currentPage, queryParams } = yield select(
+            let { pageSize, currentPage, queryParams } = yield select(
                 ({ labelManage }) => labelManage,
             );
             currentPage = 'currentPage' in payload ? payload.currentPage : currentPage;
@@ -112,7 +112,7 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     dataSource = data.ret.map(item => ({
                         ...item,
@@ -120,7 +120,7 @@ export default {
                             ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
                             : '',
                         updateTime: item.updateTime ?
-                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
                             '',
                         key: item.id,
                     }));
@@ -140,14 +140,14 @@ export default {
         },
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ labelManage }) => labelManage);
+            const { newItem, editItem } = yield select(({ labelManage }) => labelManage);
             const {
                 id,
                 tagName,
                 remark,
-            } =  payload.btnType === 'add' ? newItem : editItem;
-            
-            let params = {id,tagName,remark,tenantId}
+            } = payload.btnType === 'add' ? newItem : editItem;
+
+            let params = { id, tagName, remark, tenantId }
 
             let data = '';
             data = yield call(service.save, VtxUtil.handleTrim(params));

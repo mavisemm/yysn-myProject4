@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -30,11 +30,11 @@ let defaultNewItem = {
     startDb: "40",
     endDb: "75",
     dbCount: "100",
-    negRatio:'-0.8',
-    dbP:"1.0",
-    freqQ:"1.5",
-    dbWeight:"0.25",
-    freqWeight:'1.0'
+    negRatio: '-0.8',
+    dbP: "1.0",
+    freqQ: "1.5",
+    dbWeight: "0.25",
+    freqWeight: '1.0'
 };
 
 
@@ -88,8 +88,8 @@ export default {
     },
 
     effects: {
-         // 获取机型列表
-         *getMachineList({ payload = {} }, { call, put, select }) {
+        // 获取机型列表
+        *getMachineList({ payload = {} }, { call, put, select }) {
             let { pageSize, currentPage, queryParams } = yield select(
                 ({ deviationDegree }) => deviationDegree,
             );
@@ -98,8 +98,8 @@ export default {
             };
             let arr = [];
             const data = yield call(service1.getMachineList, VtxUtil.handleTrim(params));
-                // total = 0,
-                status = false;
+            // total = 0,
+            status = false;
             if (data && data.rc === 0) {
                 if ('ret' in data) {
                     status = true;
@@ -107,24 +107,24 @@ export default {
                         let temp = data.ret[i];
                         let children = [];
                         if (temp.machineList) {
-                            for(let j = 0;j<temp.machineList.length;j++){
+                            for (let j = 0; j < temp.machineList.length; j++) {
                                 children.push({
-                                    title:temp.machineList[j].name,
-                                    key:temp.machineList[j].id,
+                                    title: temp.machineList[j].name,
+                                    key: temp.machineList[j].id,
                                 })
                             }
                         }
                         arr[i] = {
-                            title:temp.name,
-                            key:temp.id,
-                            disableCheckbox:true,
-                            children:children
+                            title: temp.name,
+                            key: temp.id,
+                            disableCheckbox: true,
+                            children: children
                         }
                     }
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
                 // total,
             };
             // 请求成功 更新传入值
@@ -154,8 +154,8 @@ export default {
                         operate: "EQ",
                         value: 0
                     },
-            ],
-                pageIndex: currentPage -1,
+                ],
+                pageIndex: currentPage - 1,
                 pageSize,
             }
             const data = yield call(service.getList, VtxUtil.handleTrim(params));
@@ -163,18 +163,18 @@ export default {
                 total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -191,14 +191,14 @@ export default {
 
         // 新增or编辑
         *saveOrUpdate({ payload }, { call, put, select }) {
-            const {newItem, editItem } = yield select(({ deviationDegree }) => deviationDegree);
+            const { newItem, editItem } = yield select(({ deviationDegree }) => deviationDegree);
             const {
                 id,
-                name, 
-                ratios, 
-                startFreq, 
-                endFreq, 
-                freqCount, 
+                name,
+                ratios,
+                startFreq,
+                endFreq,
+                freqCount,
                 // startDb, 
                 // endDb,
                 // dbCount,
@@ -208,9 +208,9 @@ export default {
                 // dbWeight, 
                 // freqWeight,
                 detailDtoList
-            } =  payload.btnType === 'add' ? newItem : editItem;
-           
-      
+            } = payload.btnType === 'add' ? newItem : editItem;
+
+
             let params = {
                 id,
                 name,
@@ -228,7 +228,7 @@ export default {
                 dbWeight,
                 freqWeight,
                 detailDtoList,
-                type:0
+                type: 0
             };
             const data = yield call(service.save, VtxUtil.handleTrim(params));
             if (data && data.rc === 0) {

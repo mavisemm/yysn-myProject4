@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1 } from './service';
+import { service, service1 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -44,7 +44,7 @@ const initState = {
 };
 
 export default {
-    namespace: 'sgTrendHistory', 
+    namespace: 'sgTrendHistory',
 
     state: { ...initState },
 
@@ -90,7 +90,7 @@ export default {
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
                 total,
             };
             // 请求成功 更新传入值

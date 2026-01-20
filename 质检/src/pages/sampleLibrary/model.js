@@ -1,7 +1,7 @@
 import _ from 'lodash';
-const u = require('updeep');
+const u = require('updeep').default;
 import { VtxUtil } from '@src/utils/util';
-import { service,service1,service2 } from './service';
+import { service, service1, service2 } from './service';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import moment from 'moment';
@@ -41,14 +41,14 @@ const initState = {
         // 查看参数
         visible: false,
     },
-    qualityList:[],
-    faultList:[],
-    querytemplateId:"",
-    deviationList:[],
+    qualityList: [],
+    faultList: [],
+    querytemplateId: "",
+    deviationList: [],
 };
 
 export default {
-    namespace: 'sampleLibrary', 
+    namespace: 'sampleLibrary',
 
     state: { ...initState },
 
@@ -84,8 +84,8 @@ export default {
             };
             let arr = [];
             const data = yield call(service.getMachineList, VtxUtil.handleTrim(params));
-                // total = 0,
-                status = false;
+            // total = 0,
+            status = false;
             if (data && data.rc === 0) {
                 if ('ret' in data) {
                     status = true;
@@ -97,7 +97,7 @@ export default {
                 }
             }
             let uState = {
-                machineList:arr,
+                machineList: arr,
                 // total,
             };
             // 请求成功 更新传入值
@@ -108,7 +108,7 @@ export default {
             });
         },
         // 获取点位列表
-         *getPointList({ payload = {} }, { call, put, select }) {
+        *getPointList({ payload = {} }, { call, put, select }) {
             let params = {
                 filterPropertyMap: [{
                     code: "tenantId",
@@ -117,23 +117,23 @@ export default {
                 }],
             }
             const data = yield call(service.getPointList, VtxUtil.handleTrim(params));
-             let arr = [];
+            let arr = [];
             let pointList = [],
                 // total = 0,
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        pointList = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    pointList = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
@@ -149,22 +149,22 @@ export default {
         },
         // 获取品质等级列表
         *getMode({ payload = {} }, { call, put, select }) {
-           let params = {
-                  filterPropertyMap: [{
-                      code: 'tenantId',
-                      operate: 'EQ',
-                      value: tenantId,
-                  }, ],
-                  sortValueMap: [{
-                      code: 'sort',
-                      sort: 'asc',
-                  }, ],
-              }
+            let params = {
+                filterPropertyMap: [{
+                    code: 'tenantId',
+                    operate: 'EQ',
+                    value: tenantId,
+                },],
+                sortValueMap: [{
+                    code: 'sort',
+                    sort: 'asc',
+                },],
+            }
             const data = yield call(service.getMode, VtxUtil.handleTrim(params));
             let qualityList = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     qualityList = data.ret.items || []
                 }
@@ -184,15 +184,15 @@ export default {
             let params = {
                 tenantId
             }
-            const data = yield call(service.getSecondMode,{...params});
+            const data = yield call(service.getSecondMode, { ...params });
             let faultList = [],
                 querytemplateId = '';
-                status = false;;
+            status = false;;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
+                if (data.ret.length != 0) {
                     status = true;
                     faultList = data.ret.faultTypeDtoList || [],
-                    querytemplateId = data.ret?.detailDto?.templateId || ''
+                        querytemplateId = data.ret?.detailDto?.templateId || ''
                 }
             }
             let uState = {
@@ -211,40 +211,40 @@ export default {
             let params = {
                 filterPropertyMap: [
                     {
-                    code: "tenantId",
-                    operate: "EQ",
-                    value: tenantId
-                },
-                {
-                    code: "type",
-                    operate: "EQ",
-                    value: 1
-                },
-            ],
+                        code: "tenantId",
+                        operate: "EQ",
+                        value: tenantId
+                    },
+                    {
+                        code: "type",
+                        operate: "EQ",
+                        value: 1
+                    },
+                ],
                 pageIndex: 0,
-                pageSize:1000,
+                pageSize: 1000,
 
             }
             const data = yield call(service2.getDeviationList, VtxUtil.handleTrim(params));
             let dataSource = [],
                 status = false;
             if (data && data.rc === 0) {
-                if(data.ret.length != 0){
-                        status = true;
-                        dataSource = data.ret.items.map(item => ({
-                            ...item,
-                            createTime: item.createTime
-                                ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
-                                : '',
-                            updateTime: item.updateTime ?
-                                moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'):
-                                '',
-                            key: item.id,
-                        }));
+                if (data.ret.length != 0) {
+                    status = true;
+                    dataSource = data.ret.items.map(item => ({
+                        ...item,
+                        createTime: item.createTime
+                            ? moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '',
+                        updateTime: item.updateTime ?
+                            moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss') :
+                            '',
+                        key: item.id,
+                    }));
                 }
             }
             let uState = {
-                deviationList:dataSource,
+                deviationList: dataSource,
             };
             // 请求成功 更新传入值
             status && (uState = { ...uState, ...payload });
