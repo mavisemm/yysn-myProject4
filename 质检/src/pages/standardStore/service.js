@@ -2,6 +2,12 @@ import http from '@src/utils/request';
 
 export const service = (function (url) {
     return {
+        //批量删除
+        getDelete: function (params) {
+            return http.delete(`${url}/standard-frequency/deleteList`, {
+                body: JSON.stringify(params),
+            });
+        },
         //机型列表
         getMachineList: function (params) {
             return http.post(`${url}/type/config/soundDetector/type/index`, {
@@ -124,7 +130,7 @@ export const service2 = (function (url) {
         // 查看标签
         getTag: function (params) {
             return http.get(`${url}/tag/find-calculateReceiverId`, {
-                body:params,
+                body: params,
             });
         },
     };

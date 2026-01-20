@@ -181,6 +181,52 @@ class standardStore extends React.Component {
     componentWillUnmount() {
         this.disposeEcharts();
     }
+
+    batchDelete = () => {
+        const { selectedRowKeys } = this.state;
+        if (selectedRowKeys.length === 0) {
+            message.warning('请先选择要删除的数据！');
+            return;
+        }
+
+        // 确认删除
+        Modal.confirm({
+            title: '确认删除',
+            content: `您确定要删除选中的 ${selectedRowKeys.length} 条数据吗？`,
+            okText: '确认',
+            cancelText: '取消',
+            onOk: () => {
+                // 调用 DELETE 接口：直接传 id 数组（和接口封装的 body 要求匹配）
+                service.getDelete(selectedRowKeys).then(res => {
+                    if (res.rc === 0) {
+                        message.success('批量删除成功！');
+                        // 刷新列表（携带当前筛选条件，保证列表状态一致）
+                        this.getList({}, {
+                            cycleType: this.state.cycleType,
+                            machineId: this.state.machineId,
+                            receiverId: this.state.receiverId,
+                            speed: this.state.speed,
+                            machineNo: this.state.machineNo,
+                            pointId: this.state.pointId,
+                            detectorId: this.state.detectorId
+                        });
+                        // 清空选中状态，避免界面残留
+                        this.setState({
+                            selectedRowKeys: [],
+                            detailDtoList: [],
+                            selectedRows: []
+                        });
+                    } else {
+                        message.error(`删除失败：${res.err}`);
+                    }
+                }).catch(err => {
+                    message.error('删除请求出错，请重试！');
+                    console.error('批量删除失败：', err);
+                });
+            }
+        });
+    }
+
     queryTypeFind = () => {
         let params = {
             tenantId
@@ -2682,9 +2728,22 @@ class standardStore extends React.Component {
                     <div className={styles.standStoreFlex}>
                         <BtnWrap>
                             {
-                                selectedRowKeys.length == 0 ? <Button type='primary' onClick={() => this.chooseBox(1)}>全选</Button> : <Button type='primary' onClick={() => this.chooseBox(2)}>全不选</Button>
+                                selectedRowKeys.length == 0 ?
+                                    <Button type='primary' onClick={() => this.chooseBox(1)}>全选</Button> :
+                                    <Button type='primary' onClick={() => this.chooseBox(2)}>全不选</Button>
                             }
-                            <Button style={{ backgroundColor: '#F21360', color: 'white' }} onClick={() => this.lookEcharts()}>生成曲线图</Button>
+                            {/* 新增批量删除按钮 - 仅选中数据时显示 */}
+                            {selectedRowKeys.length > 0 && (
+                                <Button
+                                    type='primary'
+                                    danger
+                                    onClick={this.batchDelete}
+                                    style={{ marginLeft: 10 }}
+                                >
+                                    批量删除
+                                </Button>
+                            )}
+                            <Button style={{ backgroundColor: '#F21360', color: 'white', marginLeft: 10 }} onClick={() => this.lookEcharts()}>生成曲线图</Button>
                             <Switch checkedChildren="预览所选数据上下限" unCheckedChildren="关闭所选数据上下限" checked={this.state.switchAllShow} onChange={this.switchAllChange.bind(this)} />
                             {this.state.switchAllShow && <Button style={{ backgroundColor: 'green', color: 'white', marginLeft: 10 }} onClick={() => this.lookAllData()}>查看所选数据</Button>}
                             <Button type='primary' icon="download" disabled={disabled} onClick={() => { this.downAudioFile() }} style={{ marginLeft: 10 }}>批量下载录音文件</Button>

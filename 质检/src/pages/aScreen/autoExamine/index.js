@@ -877,7 +877,7 @@ class voiceIndex extends React.Component {
 
                         <div className={styles.zcUserconfirmflex}>
                             <img src={require('@src/assets/voice/index2.png')} />
-                            <div className={[styles.buttonStylezc, styles.buttonzc1].join(' ')} onClick={() => this.run()}>开启自动检测111</div>
+                            <div className={[styles.buttonStylezc, styles.buttonzc1].join(' ')} onClick={() => this.run()}>开启自动检测</div>
                             <div className={[styles.buttonStylezc, styles.buttonzc2].join(' ')} onClick={() => this.exportFile()}>下载质检报告</div>
                         </div>
                     </div>
