@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch,Redirect } from 'dva/router';
+import { Router, Route, Switch, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import { VtxUtil } from './utils/util';
 const routes = [
@@ -85,7 +85,7 @@ const routes = [
     {
         path: '/voiceMachine',
         title: '听音器机型管理',
-        models: () => [import('./models/common'), ],
+        models: () => [import('./models/common'),],
         component: () => import('./pages/voiceMachine'),
     },
     // {
@@ -255,7 +255,7 @@ const routes = [
     {
         path: '/faultManage',
         title: '故障类型管理',
-        models: () => [import('./models/common'), ],
+        models: () => [import('./models/common'),],
         component: () => import('./pages/faultManage'),
     },
     {
@@ -309,7 +309,7 @@ const routes = [
     {
         path: '/apiToken',
         title: 'api接口授权',
-        models: () => [import('./models/common'),import('./pages/apiToken/model')],
+        models: () => [import('./models/common'), import('./pages/apiToken/model')],
         component: () => import('./pages/apiToken'),
     },
     {
@@ -324,6 +324,7 @@ function RouterConfig({ history, app }) {
     return (
         <Router history={history}>
             <Switch>
+                <Route exact path="/" render={() => <Redirect to="/login" />} />
                 {routes.map(({ path, ...dynamics }, key) => (
                     <Route
                         key={key}
