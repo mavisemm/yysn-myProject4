@@ -16,9 +16,9 @@ class SideBar extends React.Component {
         userId: '',
         // 菜单分组
         menuGroups: [
-    {
-        title: "设备管理",
-        items: [
+            {
+                title: "设备管理",
+                items: [
                     {
                         name: "听音参数设置",
                         path: "/vParams",
@@ -52,40 +52,40 @@ class SideBar extends React.Component {
                         path: "/labelManage",
                     },
                 ]
-        },
+            },
             {
                 title: "数据分析",
                 items: [
-                            {
-                                name: "标准库管理",
-                                path: "/standardStore",
-                            },
-                            {
-                                name: "历史标准库管理",
-                                path: "/standardStoreHistory",
-                            },
-                        
-                            {
-                                name: "自动建标",
-                                path: "/autoHistory",
-                            },
-                            {
-                                name: "自动建标历史管理",
-                                path: "/auto",
-                            },
+                    {
+                        name: "标准库管理",
+                        path: "/standardStore",
+                    },
+                    {
+                        name: "历史标准库管理",
+                        path: "/standardStoreHistory",
+                    },
+
+                    {
+                        name: "自动建标",
+                        path: "/autoHistory",
+                    },
+                    {
+                        name: "自动建标历史管理",
+                        path: "/auto",
+                    },
                 ]
             },
             {
                 title: "数据管理",
                 items: [
-                            {
-                            name: "质量排序",
-                            path: "/qualitySort",
-                        },
-                        {
-                            name: "点位对比管理",
-                            path: "/collectDataCompare",
-                        },
+                    {
+                        name: "质量排序",
+                        path: "/qualitySort",
+                    },
+                    {
+                        name: "点位对比管理",
+                        path: "/collectDataCompare",
+                    },
                 ]
             }
         ],
@@ -93,49 +93,49 @@ class SideBar extends React.Component {
     constructor(props) {
         super(props);
     }
-    componentDidMount(){
+    componentDidMount() {
         // 本地化部署，
         // 2.config.js中的租户id固定
         // sideBar打开，sidBar.less打开，
         // login页面调整
     }
     componentWillUnmount() {
-       
+
     }
- 
-    barClick = (path,index) => {
+
+    barClick = (path, index) => {
         localStorage.sindex = index;
-        if(this.props.history){
+        if (this.props.history) {
             this.props.history.push({
                 pathname: path
             })
         }
     }
-    GoPage = ()=>{
-        window.open('http://115.236.25.110:8003/sound/#/login', '_blank');
+    GoPage = () => {
+        window.open('http://122.224.196.178:8003/sound/#/login', '_blank');
     }
-    render(){
-        const {oldPassword,password,menuGroups} = this.state;
+    render() {
+        const { oldPassword, password, menuGroups } = this.state;
         return (
             <div>
                 <div className={styles.sideBar}>
                     <div className={styles.sidebarHeader}>
                         后台管理系统
                     </div>
-                    
+
                     {menuGroups.map((group, groupIndex) => (
                         <div key={groupIndex}>
                             <div className={styles.menuGroupTitle}>
                                 {group.title}
                             </div>
-                            
+
                             <div className={styles.menuItems}>
                                 {group.items.map((item, itemIndex) => {
                                     const uniqueIndex = `${groupIndex}-${itemIndex}`;
                                     return (
-                                        <div 
-                                            className={localStorage.sindex === uniqueIndex ? 'activesideBarName' : 'sideBarName'} 
-                                            key={item.path} 
+                                        <div
+                                            className={localStorage.sindex === uniqueIndex ? 'activesideBarName' : 'sideBarName'}
+                                            key={item.path}
                                             onClick={() => this.barClick(item.path, uniqueIndex)}
                                         >
                                             {item.icon}
@@ -145,14 +145,14 @@ class SideBar extends React.Component {
                                 })}
                             </div>
                         </div>
-                    ))} 
+                    ))}
                     {/* <BtnWrap>
                         <Button type='primary' onClick={()=>this.GoPage()}>
                             前往检测页面
                         </Button>
                     </BtnWrap> */}
                 </div>
-           
+
             </div>
 
         );

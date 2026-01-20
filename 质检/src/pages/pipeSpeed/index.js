@@ -5,8 +5,8 @@ import { connect } from 'dva';
 import { Page, Content, BtnWrap, TableWrap } from 'rc-layout';
 import { VtxDatagrid, VtxGrid, VtxDate } from 'vtx-ui';
 const { VtxRangePicker } = VtxDate;
-import { Modal, Button, message, Input, Select, Icon, Row, Col, Table, DatePicker, Checkbox, Pagination, Switch, BackTop, Tabs,Spin,Popconfirm } from 'antd';
-import { service,service2 } from './service';
+import { Modal, Button, message, Input, Select, Icon, Row, Col, Table, DatePicker, Checkbox, Pagination, Switch, BackTop, Tabs, Spin, Popconfirm } from 'antd';
+import { service, service2 } from './service';
 import { handleColumns, VtxTimeUtil } from '@src/utils/util';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
@@ -53,60 +53,60 @@ class standardStore extends React.Component {
             freq1: 200,
             freq2: 8000,
             microsec: 200,
-            engP1:'0.15',
-            engP2:'3',
-            recordIdList:[],
-            dataList:[],
-            listenTime:0,
-            disabled:false,
-            type:'1',
-            typeList:[
+            engP1: '0.15',
+            engP2: '3',
+            recordIdList: [],
+            dataList: [],
+            listenTime: 0,
+            disabled: false,
+            type: '1',
+            typeList: [
                 {
-                    value:'1',
-                    label:"敲击声源"
+                    value: '1',
+                    label: "敲击声源"
                 },
                 {
-                    value:'2',
-                    label:"筋膜枪声源"
+                    value: '2',
+                    label: "筋膜枪声源"
                 },
                 {
-                    value:'3',
-                    label:"水管声源"
+                    value: '3',
+                    label: "水管声源"
                 },
 
             ],
-            relativeList:[
+            relativeList: [
                 {
-                    freq1:'',
-                    freq2:'',
-                    microsec:'200',
-                    checked:true,
-                    speed:""
+                    freq1: '',
+                    freq2: '',
+                    microsec: '200',
+                    checked: true,
+                    speed: ""
                 },
                 {
-                    freq1:'',
-                    freq2:'',
-                    microsec:'200',
-                    checked:true,
-                    speed:""
+                    freq1: '',
+                    freq2: '',
+                    microsec: '200',
+                    checked: true,
+                    speed: ""
                 },
             ],
-            distance:"10",
-            speed:"",
-            Amax:'',
-            Bmax:'',
-            type:'1',
-            distanceVisible:false,
-            remark1:"",
-            editVisible:false,
-            remark1:"",
-            buffRankA:"",buffRankB:"",timeA:"3",timeB:'3',
-            buffA:"",
-            buffB:'',
-            dataA:[],
-            dataB:[],
-            sampleRate:'',
-            sampleSec:1
+            distance: "10",
+            speed: "",
+            Amax: '',
+            Bmax: '',
+            type: '1',
+            distanceVisible: false,
+            remark1: "",
+            editVisible: false,
+            remark1: "",
+            buffRankA: "", buffRankB: "", timeA: "3", timeB: '3',
+            buffA: "",
+            buffB: '',
+            dataA: [],
+            dataB: [],
+            sampleRate: '',
+            sampleSec: 1
         }
     }
     componentDidMount() {
@@ -123,11 +123,11 @@ class standardStore extends React.Component {
             myEchartsDb.dispose();
             myEchartsDb = null;
         }
-        
+
     }
-    disposeEchartsA = (type)=>{
-        if(type == 1){
-        }else{
+    disposeEchartsA = (type) => {
+        if (type == 1) {
+        } else {
             if (myEchartsSingle) {
                 myEchartsSingle.dispose();
                 myEchartsSingle = null;
@@ -137,7 +137,7 @@ class standardStore extends React.Component {
                 myEchartsSingle1 = null;
             }
         }
-        
+
     }
     getList = (page) => {
         let params = {
@@ -180,16 +180,16 @@ class standardStore extends React.Component {
             selectedRowKeys,
             selectedRows,
             recordIdList,
-            sampleSec:selectedRows[0] ? selectedRows[0].sampleSec : 1
+            sampleSec: selectedRows[0] ? selectedRows[0].sampleSec : 1
         })
     }
 
-    deleteData = ()=>{
-        const {recordIdList} = this.state;
+    deleteData = () => {
+        const { recordIdList } = this.state;
         service.delete(recordIdList).then(res => {
             if (res.rc == 0) {
                 this.getList(1)
-               message.success('删除成功')
+                message.success('删除成功')
             } else {
                 message.error(res.err);
             }
@@ -201,35 +201,35 @@ class standardStore extends React.Component {
             [e.target.name]: e.target.value
         })
     }
-    typeChecked = (e)=>{
-        if(e == 1){
+    typeChecked = (e) => {
+        if (e == 1) {
             // 敲击
             this.setState({
-                engP2:3
+                engP2: 3
             })
-        }else if(e == 2){
+        } else if (e == 2) {
             // 筋膜枪
             this.setState({
-                engP2:0.6
+                engP2: 0.6
             })
-        }else{
+        } else {
             // 水管
             this.setState({
-                engP2:0.6
+                engP2: 0.6
             })
         }
         this.setState({
-            type:e
+            type: e
         })
     }
-    channelChecked = (e)=>{
+    channelChecked = (e) => {
         this.setState({
-            channelNo1:e
+            channelNo1: e
         })
     }
-    channelChecked1 = (e)=>{
+    channelChecked1 = (e) => {
         this.setState({
-            channelNo2:e
+            channelNo2: e
         })
     }
     // ===================================包络线结束==============================
@@ -270,7 +270,7 @@ class standardStore extends React.Component {
             that.setState({
                 loadingText: '文件上传中....',
                 djsVisible: false,
-                disabled:false
+                disabled: false
             })
         }, (listenTime + 1) * 1000)
         this.openDjs(listenTime);
@@ -301,19 +301,19 @@ class standardStore extends React.Component {
     }
     goRun = () => {
         this.clearClock();
-        const { remark,channelNo2,channelNo1 } = this.state;
+        const { remark, channelNo2, channelNo1 } = this.state;
         let params = {
             "receiverId1": "2vIyt3Upum5Pbk3vXW6",
             "receiverId2": "6S2vV0HsoHPlnvWaLyw",
-            remark,channelNo2,channelNo1
+            remark, channelNo2, channelNo1
         }
         service.start(VtxUtil.handleTrim(params)).then(res => {
             if (res.rc == 0) {
-                const { id, listenTime} = res.ret;
+                const { id, listenTime } = res.ret;
                 this.setState({
                     listenTime,
-                    disabled:true
-                },()=>{
+                    disabled: true
+                }, () => {
                     this.loadingTips()
                 })
                 this.subscribeRecordid(id);
@@ -337,7 +337,7 @@ class standardStore extends React.Component {
                     socketRecordid.disconnect();
                     socketRecordid = null;
                     that.setState({
-                        loadingVisible:false,
+                        loadingVisible: false,
                     })
                     that.clearClock();
                 }
@@ -363,11 +363,11 @@ class standardStore extends React.Component {
                     socketRelative.disconnect();
                     socketRelative = null;
                     that.setState({
-                        loading:false,
+                        loading: false,
                     })
                     that.clearClock();
                     this.disposeEcharts();
-                    
+
                     this.drawEcharts(temp)
                 }
             }, headers);
@@ -393,24 +393,24 @@ class standardStore extends React.Component {
             t = null;
         }
     }
-    caulateSpeed = ()=>{
-        const {dataList,speed,distance,relativeList} = this.state;
+    caulateSpeed = () => {
+        const { dataList, speed, distance, relativeList } = this.state;
         let arr = [...relativeList];
-        for(let i = 0;i<dataList.length;i++){
+        for (let i = 0; i < dataList.length; i++) {
             const calculatedSpeed = Number(distance) / Number(dataList[i].currentYtime);
             const speedWithTwoDecimals = Number(calculatedSpeed.toFixed(2));
             arr[i] = {
                 ...arr[i],
-                speed:speedWithTwoDecimals
+                speed: speedWithTwoDecimals
             }
         }
         this.setState({
-            relativeList:arr
+            relativeList: arr
         })
     }
-    caulateDis = ()=>{
-        const {dataList,speed,distance} = this.state;
-        if(speed == ''){
+    caulateDis = () => {
+        const { dataList, speed, distance } = this.state;
+        if (speed == '') {
             message.error('请先计算出速度!');
             return false;
         }
@@ -430,25 +430,25 @@ class standardStore extends React.Component {
             };
         });
         this.setState({
-            dataList:arr,
-            distanceVisible:true
+            dataList: arr,
+            distanceVisible: true
         })
 
     }
-    setSpeed = (item,index)=>{
+    setSpeed = (item, index) => {
         this.setState({
-            speed:item.speed || ''
+            speed: item.speed || ''
         })
     }
 
     caulateLine = () => {
         // 计算相关性
-        const {  microsec, recordIdList,relativeList,engP1,engP2 } = this.state;
-        if(recordIdList.length == 0){
+        const { microsec, recordIdList, relativeList, engP1, engP2 } = this.state;
+        if (recordIdList.length == 0) {
             message.error('请先选择数据！')
             return false
         }
-        if(engP2 == '' || engP1 == ''){
+        if (engP2 == '' || engP1 == '') {
             message.error('能量指数不能为空！')
             return false
         }
@@ -461,37 +461,37 @@ class standardStore extends React.Component {
 
             // &&  freq2Num / freq1Num > 1 && 
             // freq2Num / freq1Num < 1.2
-            
+
             // 检查是否都是有效数字、checked为true，且freq2/freq1在1到1.1之间
-            if (item.checked && 
-                !isNaN(freq1Num) && 
-                !isNaN(freq2Num) && 
+            if (item.checked &&
+                !isNaN(freq1Num) &&
+                !isNaN(freq2Num) &&
                 freq1Num > 0  // 避免除以0的情况
             ) {
                 tempArr.push({
                     freq1: item.freq1,
                     freq2: item.freq2,
-                    speed:item.speed,
+                    speed: item.speed,
                     engP1,
                     engP2,
                     microsec,  // 假设这里应该使用item的microsec
                     recordIdList  // 假设这里应该使用item的recordIdList
                 });
-            }else{
-                
+            } else {
+
             }
         }
-        if(tempArr.length == 0){
+        if (tempArr.length == 0) {
             message.error('结束频率和开始频率的范围比为1-1.2之间');
             message.error('开始频率/结束频率不能为空!')
             return false;
         }
         let params = {
-            list:tempArr
+            list: tempArr
         }
         this.setState({
-            loading:true,
-            distanceVisible:false,
+            loading: true,
+            distanceVisible: false,
         })
         service.getBatchCurve(VtxUtil.handleTrim(params)).then(res => {
             if (res.rc == 0) {
@@ -502,7 +502,7 @@ class standardStore extends React.Component {
         })
     }
     drawEcharts = (ret) => {
-        const {sampleSec} = this.state;
+        const { sampleSec } = this.state;
 
         // 1. 处理多条折线数据（每条线对应ret中的一个元素）
         const seriesData = []; // 存储所有折线的配置
@@ -511,8 +511,8 @@ class standardStore extends React.Component {
         let dataList = [];
         // 循环ret，提取每条折线的信息
         ret.forEach((item, index) => {
-          
-            const lineName = moment(item.time).format('YYYY-MM-DD HH:mm:ss') + '——' +  item.remark+'——'+item.freq1+'Hz至' + item.freq2+'Hz';
+
+            const lineName = moment(item.time).format('YYYY-MM-DD HH:mm:ss') + '——' + item.remark + '——' + item.freq1 + 'Hz至' + item.freq2 + 'Hz';
 
             const lineData = (item.resultList || []).map(v => Number(v) / 1); // 先转数字再除
             // 计算当前折线的中间点和最高点
@@ -531,7 +531,7 @@ class standardStore extends React.Component {
                     }
                 });
             }
-    
+
 
             // 每条折线的配置（包含标记点）
             seriesData.push({
@@ -563,7 +563,7 @@ class standardStore extends React.Component {
                         }] : [])
                     ]
                 },
-                  // 添加中间点的虚线标记（水平和垂直）
+                // 添加中间点的虚线标记（水平和垂直）
                 markLine: {
                     symbol: ['none', 'none'], // 不显示端点标记
                     label: { show: false }, // 不显示标签
@@ -600,9 +600,9 @@ class standardStore extends React.Component {
                 maxYValue,
                 maxYIndex,
                 currentYtime,
-                time:moment(item.time).format('YYYY-MM-DD HH:mm:ss'),
-                disA:'',
-                disB:""
+                time: moment(item.time).format('YYYY-MM-DD HH:mm:ss'),
+                disA: '',
+                disB: ""
             })
         });
 
@@ -637,7 +637,7 @@ class standardStore extends React.Component {
             yAxis: {
                 type: 'value',
                 name: '',
-                scale:true
+                scale: true
             },
             series: seriesData,
             dataZoom: [
@@ -648,7 +648,7 @@ class standardStore extends React.Component {
         // console.log(option)
         this.setState({
             dataList
-        },()=>{
+        }, () => {
             this.caulateSpeed();
         })
         // 3. 初始化并渲染图表
@@ -661,7 +661,7 @@ class standardStore extends React.Component {
             // });
         }
     };
-    handleClose = ()=>{
+    handleClose = () => {
         if (myEchartsSingle) {
             myEchartsSingle.dispose();
             myEchartsSingle = null;
@@ -675,22 +675,22 @@ class standardStore extends React.Component {
             myEchartsPre = null;
         }
         this.setState({
-            Visible:false,
-            editVisible:false,
-            preVisible:false
+            Visible: false,
+            editVisible: false,
+            preVisible: false
         })
     }
-    getEcharts = (xArr) =>{
+    getEcharts = (xArr) => {
         if (this.echartsBoxSingle1) {
             if (myEchartsSingle1 == null) {
                 myEchartsSingle1 = echarts.init(this.echartsBoxSingle1);
             }
             if (myEchartsSingle1) {
-                 let optionDb = JSON.parse(JSON.stringify(echartsOption.optionDb));
-                 optionDb.title.text = 'A、B点能量曲线图';
-                 optionDb.xAxis[0].data = xArr || [];
-                 optionDb.series = totaldbArr || [];
-                 myEchartsSingle1.setOption(optionDb)
+                let optionDb = JSON.parse(JSON.stringify(echartsOption.optionDb));
+                optionDb.title.text = 'A、B点能量曲线图';
+                optionDb.xAxis[0].data = xArr || [];
+                optionDb.series = totaldbArr || [];
+                myEchartsSingle1.setOption(optionDb)
             }
         }
 
@@ -699,26 +699,26 @@ class standardStore extends React.Component {
                 myEchartsSingle = echarts.init(this.echartsBoxSingle);
             }
             if (myEchartsSingle) {
-                 let optionDensity = JSON.parse(JSON.stringify(echartsOption.optionDensity));
-                 optionDensity.title.text = 'A、B点密度曲线图';
-                 optionDensity.xAxis[0].data = xArr || [];
-                 optionDensity.series = totaldensityArr || [];
-                 myEchartsSingle.setOption(optionDensity)
+                let optionDensity = JSON.parse(JSON.stringify(echartsOption.optionDensity));
+                optionDensity.title.text = 'A、B点密度曲线图';
+                optionDensity.xAxis[0].data = xArr || [];
+                optionDensity.series = totaldensityArr || [];
+                myEchartsSingle.setOption(optionDensity)
             }
         }
     }
-    lookSingle =(record)=>{
+    lookSingle = (record) => {
         this.disposeEchartsA(2);
         // 查看曲线图
         totaldbArr = [];
         totaldensityArr = [];
         this.setState({
-            Visible:true
+            Visible: true
         })
-        const {id,receiverId1,receiverId2} = record;
+        const { id, receiverId1, receiverId2 } = record;
         let params = {
-            recordId:id,
-            receiverId:receiverId1
+            recordId: id,
+            receiverId: receiverId1
         }
         service.getSingle(VtxUtil.handleTrim(params)).then(res => {
             if (res.rc == 0) {
@@ -730,32 +730,32 @@ class standardStore extends React.Component {
                     // 计算横坐标并添加到数组
                     const xValue = Math.sqrt(freq1 * freq2).toFixed(2);
                     xArr.push(xValue);
-                    
+
                     // 处理密度和db数据
                     densityArr.push(density.toFixed(6));
                     dbArr.push(db === 0 ? undefined : db.toFixed(6));
                 });
                 totaldbArr.push({
-                    name:moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——A点——' + record.remark,
-                    type:'line',
-                    data:dbArr
+                    name: moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——A点——' + record.remark,
+                    type: 'line',
+                    data: dbArr
                 })
                 totaldensityArr.push({
-                    name:moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——A点——' + record.remark,
-                    type:'line',
-                    data:densityArr
+                    name: moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——A点——' + record.remark,
+                    type: 'line',
+                    data: densityArr
                 })
-                
+
                 this.getEcharts(xArr);
-            
+
 
             } else {
                 message.error(res.err);
             }
         })
         let params1 = {
-            recordId:id,
-            receiverId:receiverId2
+            recordId: id,
+            receiverId: receiverId2
         }
         service.getSingle(VtxUtil.handleTrim(params1)).then(res => {
             if (res.rc == 0) {
@@ -763,54 +763,54 @@ class standardStore extends React.Component {
                 const xArr = [];
                 const densityArr = [];
                 const dbArr = [];
-                
+
                 data.forEach(({ freq1, freq2, density, db }) => {
                     // 计算横坐标并添加到数组
                     const xValue = Math.sqrt(freq1 * freq2).toFixed(2);
                     xArr.push(xValue);
-                    
+
                     // 处理密度和db数据
                     densityArr.push(density.toFixed(6));
                     dbArr.push(db === 0 ? undefined : db.toFixed(6));
                 });
-                
+
                 totaldbArr.push({
-                    name:moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——B点——' + record.remark,
-                    type:'line',
-                    data:dbArr
+                    name: moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——B点——' + record.remark,
+                    type: 'line',
+                    data: dbArr
                 })
                 totaldensityArr.push({
-                    name:moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——B点——' + record.remark,
-                    type:'line',
-                    data:densityArr
+                    name: moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + '——B点——' + record.remark,
+                    type: 'line',
+                    data: densityArr
                 })
                 this.getEcharts(xArr);
             } else {
                 message.error(res.err);
             }
         })
-        
+
     }
 
     // ===================================================== A，B能量对比图==============================================================
-    compare = (type)=>{
-        const {selectedRows} = this.state;
+    compare = (type) => {
+        const { selectedRows } = this.state;
         totalAdbArr = [];
         totalAdensityArr = [];
         this.disposeEchartsA(1);
-        if(selectedRows.length == 0){
+        if (selectedRows.length == 0) {
             message.error('请先选择需要比对的数据');
             return false;
         }
-        for(let i = 0;i<selectedRows.length;i++){
-            const {id,receiverId1,receiverId2} = selectedRows[i];
-            this.getA(id,receiverId1,receiverId2,type,selectedRows[i])
+        for (let i = 0; i < selectedRows.length; i++) {
+            const { id, receiverId1, receiverId2 } = selectedRows[i];
+            this.getA(id, receiverId1, receiverId2, type, selectedRows[i])
         }
     }
-    getA = (id,receiverId1,receiverId2,type,record)=>{
+    getA = (id, receiverId1, receiverId2, type, record) => {
         let params = {
-            recordId:id,
-            receiverId:type == 1 ? receiverId1 : receiverId2
+            recordId: id,
+            receiverId: type == 1 ? receiverId1 : receiverId2
         }
         service.getSingle(VtxUtil.handleTrim(params)).then(res => {
             if (res.rc == 0) {
@@ -822,42 +822,42 @@ class standardStore extends React.Component {
                     // 计算横坐标并添加到数组
                     const xValue = Math.sqrt(freq1 * freq2).toFixed(2);
                     xArr.push(xValue);
-                    
+
                     // 处理密度和db数据
                     densityArr.push(density.toFixed(6));
                     dbArr.push(db === 0 ? undefined : db.toFixed(6));
                 });
                 let name = (type == 1 ? '——A点——' : '——B点——');
                 totalAdbArr.push({
-                    name:moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + name + record.remark,
-                    type:'line',
-                    data:dbArr
+                    name: moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + name + record.remark,
+                    type: 'line',
+                    data: dbArr
                 })
                 totalAdensityArr.push({
-                    name:moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + name + record.remark,
-                    type:'line',
-                    data:densityArr
+                    name: moment(record.recordTime).format('YYYY-MM-DD HH:mm:ss') + name + record.remark,
+                    type: 'line',
+                    data: densityArr
                 })
-                
-                this.getAEcharts(xArr,type);
-            
+
+                this.getAEcharts(xArr, type);
+
             } else {
                 message.error(res.err);
             }
         })
     }
 
-    getAEcharts = (xArr,type) =>{
+    getAEcharts = (xArr, type) => {
         if (this.echartsBoxAdb) {
             if (myEchartsA == null) {
                 myEchartsA = echarts.init(this.echartsBoxAdb);
             }
             if (myEchartsA) {
-                 let optionDb = JSON.parse(JSON.stringify(echartsOption.optionDb));
-                 optionDb.title.text =  (type == 1 ? 'A点能量比对曲线图' :'B点能量比对曲线图');
-                 optionDb.xAxis[0].data = xArr || [];
-                 optionDb.series = totalAdbArr || [];
-                 myEchartsA.setOption(optionDb)
+                let optionDb = JSON.parse(JSON.stringify(echartsOption.optionDb));
+                optionDb.title.text = (type == 1 ? 'A点能量比对曲线图' : 'B点能量比对曲线图');
+                optionDb.xAxis[0].data = xArr || [];
+                optionDb.series = totalAdbArr || [];
+                myEchartsA.setOption(optionDb)
             }
         }
 
@@ -866,11 +866,11 @@ class standardStore extends React.Component {
                 myEchartsA1 = echarts.init(this.echartsBoxAdensity);
             }
             if (myEchartsA1) {
-                 let optionDensity = JSON.parse(JSON.stringify(echartsOption.optionDensity));
-                 optionDensity.title.text = (type == 1 ? 'A点密度曲线图' :'B点密度曲线图');
-                 optionDensity.xAxis[0].data = xArr || [];
-                 optionDensity.series = totalAdensityArr || [];
-                 myEchartsA1.setOption(optionDensity)
+                let optionDensity = JSON.parse(JSON.stringify(echartsOption.optionDensity));
+                optionDensity.title.text = (type == 1 ? 'A点密度曲线图' : 'B点密度曲线图');
+                optionDensity.xAxis[0].data = xArr || [];
+                optionDensity.series = totalAdensityArr || [];
+                myEchartsA1.setOption(optionDensity)
             }
         }
     }
@@ -878,15 +878,15 @@ class standardStore extends React.Component {
     // ==================================================A、B能量对比结束==================================================================
 
 
-    addRelative = ()=>{
+    addRelative = () => {
         let arr = [{
             freq1: "",
             freq2: "",
-            microsec:"",
-            speed:"",
-            checked:true
+            microsec: "",
+            speed: "",
+            checked: true
         }]
-        const {relativeList = []} = this.state;
+        const { relativeList = [] } = this.state;
         let tempArr = [...relativeList];
         this.setState({
             relativeList: tempArr.concat(arr),
@@ -894,18 +894,18 @@ class standardStore extends React.Component {
 
     }
 
-    playAudio = (record,no)=>{
+    playAudio = (record, no) => {
         filePath = comm.pipeAudioUrl + '?recordId=' + record.id + '&no=' + no;
         this.setState({
             filePath
         })
     }
 
-    inputChangeIndex = (index,e)=>{
-        const {relativeList=[]} = this.state;
+    inputChangeIndex = (index, e) => {
+        const { relativeList = [] } = this.state;
         let arr = [];
         arr = [...relativeList];
-        arr[index]={
+        arr[index] = {
             ...arr[index],
             [e.target.name]: e.target.value
         }
@@ -913,11 +913,11 @@ class standardStore extends React.Component {
             relativeList: arr
         })
     }
-    boxChange = (index,e)=>{
-        const {relativeList=[]} = this.state;
+    boxChange = (index, e) => {
+        const { relativeList = [] } = this.state;
         let arr = [];
         arr = [...relativeList];
-        arr[index]={
+        arr[index] = {
             ...arr[index],
             checked: e.target.checked
         }
@@ -925,32 +925,32 @@ class standardStore extends React.Component {
             relativeList: arr
         })
     }
-    deleteIndex = (index)=>{
-        const {relativeList} = this.state;
+    deleteIndex = (index) => {
+        const { relativeList } = this.state;
         let arr = [...relativeList];
-            arr.splice(index, 1);
-            this.setState({
-                relativeList: arr
-            })
-    }
-
-    editRemark = (record)=>{
+        arr.splice(index, 1);
         this.setState({
-            remark1:record.remark,
-            id:record.id,
-            editVisible:true,
+            relativeList: arr
         })
     }
-    handleReamrk = ()=>{
-        const {id,remark1} = this.state;
+
+    editRemark = (record) => {
+        this.setState({
+            remark1: record.remark,
+            id: record.id,
+            editVisible: true,
+        })
+    }
+    handleReamrk = () => {
+        const { id, remark1 } = this.state;
         let params1 = {
             id,
-            remark:remark1
+            remark: remark1
         }
         service.editRemark(VtxUtil.handleTrim(params1)).then(res => {
             if (res.rc == 0) {
                 this.setState({
-                    editVisible:false
+                    editVisible: false
                 })
                 this.getList();
             } else {
@@ -958,8 +958,8 @@ class standardStore extends React.Component {
             }
         })
     }
-    GoPage = ()=>{
-        window.open('http://115.236.25.110:8003/sound/#/pipeline', '_blank');
+    GoPage = () => {
+        window.open('http://122.224.196.178:8003/sound/#/pipeline', '_blank');
     }
 
     render() {
@@ -1015,72 +1015,72 @@ class standardStore extends React.Component {
                 ),
             }
         ];
-        const { loading, selectedRowKeys, selectedRowKeysCycle, selectedRowKeysAll,filePath } = this.state;
+        const { loading, selectedRowKeys, selectedRowKeysCycle, selectedRowKeysAll, filePath } = this.state;
         const rowSelection = {
             selectedRowKeys,
             hideDefaultSelections: true,
             onChange: this.onSelectChange,
         };
-        const { tableData, total, freq1, remark1, microsec, remark,dataList,disabled,leaveTime,djsVisible,
-            loadingVisible,loadingText,relativeList,distance,speed,Bmax,Amax,engP1,engP2,channelNo1,channelNo2,distanceVisible,
-            buffRankA,buffRankB,timeA,timeB
-         } = this.state;
-  
+        const { tableData, total, freq1, remark1, microsec, remark, dataList, disabled, leaveTime, djsVisible,
+            loadingVisible, loadingText, relativeList, distance, speed, Bmax, Amax, engP1, engP2, channelNo1, channelNo2, distanceVisible,
+            buffRankA, buffRankB, timeA, timeB
+        } = this.state;
+
         return (
             <Page title='相关性速度分析' className={styles.body}>
                 <div>
-                   
+
                 </div>
                 <BtnWrap>
                     <Button type='primary' style={{ marginLeft: 10 }} onClick={() => this.getList(1)}>刷新数据</Button>
                     <Button type='primary' style={{ marginLeft: 10 }} onClick={() => this.GoPage()}>前往分析页面</Button>
                 </BtnWrap>
                 <div style={{ width: '98%', marginLeft: 10 }}>
-                    <div style={{ width: '100%', border: '1px solid green', borderRadius: '10px', padding: '10px 10px', marginTop: 10 ,position:'relative'}}>
-                        <div className={styles.flex}  style={{marginBottom:10}}>
+                    <div style={{ width: '100%', border: '1px solid green', borderRadius: '10px', padding: '10px 10px', marginTop: 10, position: 'relative' }}>
+                        <div className={styles.flex} style={{ marginBottom: 10 }}>
                             <Input addonBefore="两点之间的距离：" addonAfter='m' style={{ width: '200px' }} name='distance' placeholder="请输入" value={distance}
-                            onChange={this.inputChange.bind(this)} />
-                            <Input addonBefore="传播速度：" addonAfter='m/s' style={{ width: '200px',marginLeft:10 }} name='speed' placeholder="请输入" value={speed}
-                            onChange={this.inputChange.bind(this)} />
+                                onChange={this.inputChange.bind(this)} />
+                            <Input addonBefore="传播速度：" addonAfter='m/s' style={{ width: '200px', marginLeft: 10 }} name='speed' placeholder="请输入" value={speed}
+                                onChange={this.inputChange.bind(this)} />
                             <Input addonBefore="microsec：" addonAfter='毫秒' style={{ width: '200px', marginLeft: 10 }} name='microsec' placeholder="请输入" value={microsec}
-                                    onChange={this.inputChange.bind(this)} />
-                            <Select placeholder='选择模式' value={this.state.type} onChange={this.typeChecked.bind(this)} style={{width:100,marginLeft:10}}>
+                                onChange={this.inputChange.bind(this)} />
+                            <Select placeholder='选择模式' value={this.state.type} onChange={this.typeChecked.bind(this)} style={{ width: 100, marginLeft: 10 }}>
                                 {
                                     (this.state.typeList || []).map((item, index) => {
                                         return (
-                                            <Option value ={item.value} key={index}> {item.label}</Option>
+                                            <Option value={item.value} key={index}> {item.label}</Option>
                                         )
                                     })
                                 }
                             </Select>
                             <Input addonBefore="能量指数1：" style={{ width: '150px', marginLeft: 10 }} name='engP1' placeholder="请输入" value={engP1}
-                                    onChange={this.inputChange.bind(this)} />
+                                onChange={this.inputChange.bind(this)} />
                             <Input addonBefore="能量指数2：" style={{ width: '150px', marginLeft: 10 }} name='engP2' placeholder="请输入" value={engP2}
-                                    onChange={this.inputChange.bind(this)} />
-                          
-                            <audio  src={filePath} autoPlay controls style={{width:300,height:30,marginLeft:10}}></audio>
+                                onChange={this.inputChange.bind(this)} />
+
+                            <audio src={filePath} autoPlay controls style={{ width: 300, height: 30, marginLeft: 10 }}></audio>
                             <Button type='danger' style={{ marginLeft: 10 }} onClick={() => this.caulateLine()}>计算相关性</Button>
                             <Button type='danger' style={{ marginLeft: 10 }} onClick={() => this.caulateDis()}>计算位置</Button>
                         </div>
 
-                        <div style={{display:"flex",justifyContent:'space-between',alignItems:"flex-start"}}>
+                        <div style={{ display: "flex", justifyContent: 'space-between', alignItems: "flex-start" }}>
                             <div>
                                 {
-                                    relativeList.map((item,index)=>{
+                                    relativeList.map((item, index) => {
                                         return (
-                                            <div style={{marginBottom:10}}>
-                                            <Input addonBefore="开始频率：" addonAfter='Hz' style={{ width: '180px' }} name='freq1' placeholder="请输入" value={item.freq1}
-                                                onChange={this.inputChangeIndex.bind(this,index)} />
-                                            <Input addonBefore="结束频率：" addonAfter='Hz' style={{ width: '180px', marginLeft: 5 }} name='freq2' placeholder="请输入" value={item.freq2}
-                                                onChange={this.inputChangeIndex.bind(this,index)} />
-                                            <Input addonBefore="传播速度：" addonAfter='m/s' style={{ width: '180px', marginLeft: 5 }} name='speed' placeholder="请输入" value={item.speed}
-                                                onChange={this.inputChangeIndex.bind(this,index)} />
-                                            <Button type='danger' style={{marginLeft:10}} onClick={() => this.deleteIndex(index)}>删除</Button>
-                                            <Checkbox style={{marginLeft:10}} onChange={this.boxChange.bind(this,index)} checked={item.checked}></Checkbox>
-                                            {
-                                                index == 0 ? <Button type='primary' style={{marginLeft:10}} onClick={() => this.setSpeed(item,index)}>设置为传播速度</Button> : ''
-                                            }
-                                        </div>
+                                            <div style={{ marginBottom: 10 }}>
+                                                <Input addonBefore="开始频率：" addonAfter='Hz' style={{ width: '180px' }} name='freq1' placeholder="请输入" value={item.freq1}
+                                                    onChange={this.inputChangeIndex.bind(this, index)} />
+                                                <Input addonBefore="结束频率：" addonAfter='Hz' style={{ width: '180px', marginLeft: 5 }} name='freq2' placeholder="请输入" value={item.freq2}
+                                                    onChange={this.inputChangeIndex.bind(this, index)} />
+                                                <Input addonBefore="传播速度：" addonAfter='m/s' style={{ width: '180px', marginLeft: 5 }} name='speed' placeholder="请输入" value={item.speed}
+                                                    onChange={this.inputChangeIndex.bind(this, index)} />
+                                                <Button type='danger' style={{ marginLeft: 10 }} onClick={() => this.deleteIndex(index)}>删除</Button>
+                                                <Checkbox style={{ marginLeft: 10 }} onChange={this.boxChange.bind(this, index)} checked={item.checked}></Checkbox>
+                                                {
+                                                    index == 0 ? <Button type='primary' style={{ marginLeft: 10 }} onClick={() => this.setSpeed(item, index)}>设置为传播速度</Button> : ''
+                                                }
+                                            </div>
                                         )
                                     })
                                 }
@@ -1088,38 +1088,38 @@ class standardStore extends React.Component {
                                     <Button type='primary' onClick={() => this.addRelative()}>新增</Button>
                                 </BtnWrap>
                             </div>
-                    
-                        </div>
-               
 
-                        <div style={{marginBottom:10}}>
-                                {
-                                    dataList.map((item, index) => {
-                                        // 计算顶点在A和B之间的相对位置
-                                        const vertexPosition = (item.disA / distance) * 100; // 百分比位置
-                                        return (
-                                        <div style={{ 
-                                            margin: '10px 0', 
-                                            padding: '10px', 
-                                            border: '1px solid #e0e0e0', 
-                                            borderRadius: '4px' 
+                        </div>
+
+
+                        <div style={{ marginBottom: 10 }}>
+                            {
+                                dataList.map((item, index) => {
+                                    // 计算顶点在A和B之间的相对位置
+                                    const vertexPosition = (item.disA / distance) * 100; // 百分比位置
+                                    return (
+                                        <div style={{
+                                            margin: '10px 0',
+                                            padding: '10px',
+                                            border: '1px solid #e0e0e0',
+                                            borderRadius: '4px'
                                         }}>
-                                            <span><span style={{color:'blue'}}>检测时间：</span>{item.time}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            <span><span style={{color:'blue'}}>备注：</span>{item.remark}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            <span><span style={{color:'blue'}}>分析频段：</span>{item.freq1}-{item.freq2}Hz&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            <span><span style={{color:'blue'}}>顶点坐标：</span> x：{item.maxYIndex}，y:{item.maxYValue}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            <span><span style={{color:'blue'}}>中点坐标：</span> x：{item.middleIndex}，y:{item.middleValue}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                            <span><span style={{color:'blue'}}>时间(s)：</span>{item.currentYtime}</span>
-                                            
+                                            <span><span style={{ color: 'blue' }}>检测时间：</span>{item.time}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <span><span style={{ color: 'blue' }}>备注：</span>{item.remark}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <span><span style={{ color: 'blue' }}>分析频段：</span>{item.freq1}-{item.freq2}Hz&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <span><span style={{ color: 'blue' }}>顶点坐标：</span> x：{item.maxYIndex}，y:{item.maxYValue}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <span><span style={{ color: 'blue' }}>中点坐标：</span> x：{item.middleIndex}，y:{item.middleValue}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            <span><span style={{ color: 'blue' }}>时间(s)：</span>{item.currentYtime}</span>
+
                                             {/* A/B两点距离图形 */}
                                             {
-                                                distanceVisible && 
-                                                   <div style={{ 
-                                                    marginTop: '5px', 
+                                                distanceVisible &&
+                                                <div style={{
+                                                    marginTop: '5px',
                                                     padding: '10px 0',
                                                     position: 'relative',
                                                     height: '80px'
-                                                    }}>
+                                                }}>
                                                     {/* 总长度线段 */}
                                                     <div style={{
                                                         position: 'absolute',
@@ -1129,7 +1129,7 @@ class standardStore extends React.Component {
                                                         height: '2px',
                                                         backgroundColor: '#333'
                                                     }} />
-                                                    
+
                                                     {/* A点标记及距离 */}
                                                     <div style={{
                                                         position: 'absolute',
@@ -1139,22 +1139,22 @@ class standardStore extends React.Component {
                                                         textAlign: 'center'
                                                     }}>
                                                         <div style={{
-                                                        width: '10px',
-                                                        height: '10px',
-                                                        borderRadius: '50%',
-                                                        backgroundColor: 'red',
-                                                        margin: '0 auto'
+                                                            width: '10px',
+                                                            height: '10px',
+                                                            borderRadius: '50%',
+                                                            backgroundColor: 'red',
+                                                            margin: '0 auto'
                                                         }} />
                                                         <span style={{ fontSize: '12px' }}>A点</span>
-                                                        <div style={{ 
-                                                        fontSize: '16px', 
-                                                        color: 'red',
-                                                        marginTop: '10px'
+                                                        <div style={{
+                                                            fontSize: '16px',
+                                                            color: 'red',
+                                                            marginTop: '10px'
                                                         }}>
-                                                        声源距离A点{item.disA}m
+                                                            声源距离A点{item.disA}m
                                                         </div>
                                                     </div>
-                                                    
+
                                                     {/* B点标记及距离 */}
                                                     <div style={{
                                                         position: 'absolute',
@@ -1164,22 +1164,22 @@ class standardStore extends React.Component {
                                                         textAlign: 'center'
                                                     }}>
                                                         <div style={{
-                                                        width: '10px',
-                                                        height: '10px',
-                                                        borderRadius: '50%',
-                                                        backgroundColor: 'blue',
-                                                        margin: '0 auto'
+                                                            width: '10px',
+                                                            height: '10px',
+                                                            borderRadius: '50%',
+                                                            backgroundColor: 'blue',
+                                                            margin: '0 auto'
                                                         }} />
                                                         <span style={{ fontSize: '12px' }}>B点</span>
-                                                        <div style={{ 
-                                                        fontSize: '16px', 
-                                                        color: 'blue',
-                                                        marginTop: '10px'
+                                                        <div style={{
+                                                            fontSize: '16px',
+                                                            color: 'blue',
+                                                            marginTop: '10px'
                                                         }}>
-                                                        声源距离B点{item.disB}m
+                                                            声源距离B点{item.disB}m
                                                         </div>
                                                     </div>
-                                                    
+
                                                     {/* 顶点标记 */}
                                                     <div style={{
                                                         position: 'absolute',
@@ -1194,10 +1194,10 @@ class standardStore extends React.Component {
                                                         backgroundColor: 'green',
                                                         margin: '0 auto'
                                                         }} /> */}
-                                                        <Icon type="sound" style={{ fontSize: '40px', color: 'green' }}/>
+                                                        <Icon type="sound" style={{ fontSize: '40px', color: 'green' }} />
                                                         {/* <span style={{ fontSize: '10px', color: 'green' }}>声源位置</span> */}
                                                     </div>
-                                                    
+
                                                     {/* 总长度标签 */}
                                                     <div style={{
                                                         position: 'absolute',
@@ -1209,18 +1209,18 @@ class standardStore extends React.Component {
                                                     }}>
                                                         总长度: {distance}m
                                                     </div>
-                                            </div>
+                                                </div>
                                             }
-                                         
+
                                         </div>
-                                        )
-                                    })
-                                    }
+                                    )
+                                })
+                            }
 
 
-                            </div>
-                
-                    
+                        </div>
+
+
                         <div ref={
                             (c) => {
                                 this.echartsBox = c
@@ -1228,46 +1228,46 @@ class standardStore extends React.Component {
                         }
                             style={{ width: '100%', height: 400 }}
                         />
-                        {loading && 
+                        {loading &&
                             <div style={{
-                                width:300,height:200,margin:"0 auto",position:'absolute',top:'45%',left:'45%'
+                                width: 300, height: 200, margin: "0 auto", position: 'absolute', top: '45%', left: '45%'
                             }}>
-                                <Spin size="large" tip="Loading..."  style={{
-                                fontSize:30
-                            }}/>
+                                <Spin size="large" tip="Loading..." style={{
+                                    fontSize: 30
+                                }} />
                             </div>
                         }
                     </div>
-            
+
 
                     <Table onChange={this.pageOnChange} showTotal={this.showTotal.bind(this)} total={total} rowSelection={rowSelection} rowKey={record => record.id} columns={columns} dataSource={tableData} />
                     <BtnWrap>
                         <Popconfirm placement="topLeft" title='确认删除所选数据吗？' onConfirm={this.deleteData.bind(this)} okText="确定" cancelText="取消">
-                            < Button style={{marginLeft:10}} type='danger'> 批量删除 </Button>
+                            < Button style={{ marginLeft: 10 }} type='danger'> 批量删除 </Button>
                         </Popconfirm>
-                        <Button type='primary' onClick={()=>this.compare(1)}>A点比对</Button>
-                        <Button type='primary' onClick={()=>this.compare(2)} >B点比对</Button>
+                        <Button type='primary' onClick={() => this.compare(1)}>A点比对</Button>
+                        <Button type='primary' onClick={() => this.compare(2)} >B点比对</Button>
                     </BtnWrap>
 
-                    
-                    <div ref = {
-                            (c) => {
-                                this.echartsBoxAdb = c
-                            }
+
+                    <div ref={
+                        (c) => {
+                            this.echartsBoxAdb = c
                         }
-                        style = {
+                    }
+                        style={
                             {
                                 width: '100%',
                                 height: '400px',
                             }
                         }
-                    /> 
-                    <div ref = {
-                            (c) => {
-                                this.echartsBoxAdensity = c
-                            }
+                    />
+                    <div ref={
+                        (c) => {
+                            this.echartsBoxAdensity = c
                         }
-                        style = {
+                    }
+                        style={
                             {
                                 width: '100%',
                                 height: '400px',
@@ -1275,31 +1275,31 @@ class standardStore extends React.Component {
                         }
                     />
                 </div>
-                < Modal title = "曲线图" 
-                    visible = {this.state.Visible}
-                    onOk = {()=>{this.handleClose()}}
-                    onCancel = {() => {this.handleClose()}}
+                < Modal title="曲线图"
+                    visible={this.state.Visible}
+                    onOk={() => { this.handleClose() }}
+                    onCancel={() => { this.handleClose() }}
                     width="95%"
-                    >
-                 
-                    <div ref = {
-                            (c) => {
-                                this.echartsBoxSingle1 = c
-                            }
+                >
+
+                    <div ref={
+                        (c) => {
+                            this.echartsBoxSingle1 = c
                         }
-                        style = {
+                    }
+                        style={
                             {
                                 width: '100%',
                                 height: '400px',
                             }
                         }
-                    /> 
-                    <div ref = {
-                            (c) => {
-                                this.echartsBoxSingle = c
-                            }
+                    />
+                    <div ref={
+                        (c) => {
+                            this.echartsBoxSingle = c
                         }
-                        style = {
+                    }
+                        style={
                             {
                                 width: '100%',
                                 height: '400px',
@@ -1307,38 +1307,38 @@ class standardStore extends React.Component {
                         }
                     />
                 </Modal>
-                < Modal title = "时域图" 
-                    visible = {this.state.preVisible}
-                    onOk = {()=>{this.handleClose()}}
-                    onCancel = {() => {this.handleClose()}}
+                < Modal title="时域图"
+                    visible={this.state.preVisible}
+                    onOk={() => { this.handleClose() }}
+                    onCancel={() => { this.handleClose() }}
                     width="95%"
-                    >
+                >
                     <div>
                         最大增益坐标：X：{this.state.maxYindex},Y:{this.state.maxYpre}
                     </div>
-                    <div ref = {
-                            (c) => {
-                                this.echartsBoxpre= c
-                            }
+                    <div ref={
+                        (c) => {
+                            this.echartsBoxpre = c
                         }
-                        style = {
+                    }
+                        style={
                             {
                                 width: '100%',
                                 height: '500px',
                             }
                         }
-                    /> 
+                    />
                 </Modal>
 
-                < Modal title = "修改备注" 
-                    visible = {this.state.editVisible}
-                    onOk = {()=>{this.handleReamrk()}}
-                    onCancel = {() => {this.handleClose()}}
+                < Modal title="修改备注"
+                    visible={this.state.editVisible}
+                    onOk={() => { this.handleReamrk() }}
+                    onCancel={() => { this.handleClose() }}
                     width="40%"
-                    >
-                        <Input addonBefore="备注：" style={{ width: '500px', marginLeft: "10px" }} placeholder="请输入备注:" value={remark1} name='remark1'
+                >
+                    <Input addonBefore="备注：" style={{ width: '500px', marginLeft: "10px" }} placeholder="请输入备注:" value={remark1} name='remark1'
                         onChange={this.inputChange.bind(this)} />
-                        
+
                 </Modal>
             </Page>
         )

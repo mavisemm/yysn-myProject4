@@ -1,5 +1,5 @@
 var path = require('path');
-var host = 'http://115.236.25.110:8003/';
+var host = 'http://122.224.196.178:8003/';
 
 export default {
     entry: 'src/index.js',
@@ -56,21 +56,21 @@ export default {
         {
             async: 'echarts',
             children: true,
-            minChunks: function(module) {
+            minChunks: function (module) {
                 return /echarts/.test(module.context);
             },
         },
         {
             async: 'lodash',
             children: true,
-            minChunks: function(module) {
+            minChunks: function (module) {
                 return /lodash/.test(module.context);
             },
         },
         {
             async: 'moment',
             children: true,
-            minChunks: function(module) {
+            minChunks: function (module) {
                 return /moment/.test(module.context);
             },
         },
