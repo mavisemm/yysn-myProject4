@@ -106,14 +106,16 @@ class standardStore extends React.Component {
             cycleType: '',
             machineId: '',
             receiverId: '',
+            judgeType: '',
+            qualityId: '',
             recordId: "",
             speed: '',
             tableData: [],
             singleDataVisible: false,
             standardLineVisible: false,
-            detailDtoList: [],//选定记录列表
+            detailDtoList: [],
             name: "",
-            cycleList: [],//数据周期列表
+            cycleList: [],
             precision: "",
             cycleDtoList: [],
             standardCycleList: [],
@@ -149,14 +151,16 @@ class standardStore extends React.Component {
             code: "exp",
             fullScreenVisible: false,
             switchAllShow: false,
-            allCaculteData: [],//选择自动包络线的数据
-            allCaculteDataChecked: [],//弹窗中另外选择的
+            allCaculteData: [],
+            allCaculteDataChecked: [],
             selectedRows: [],
             sameGroupDtoList: [],
             pointList: [],
             pointCycleName: "",
             disabled: false,
             clickTrendDimension: 'db',
+            startTime: '',
+            endTime: '',
         }
     }
     componentDidMount() {
@@ -183,24 +187,26 @@ class standardStore extends React.Component {
     }
 
     batchDelete = () => {
-        const { selectedRowKeys } = this.state;
+        const {
+            selectedRowKeys,
+            startTime, endTime,
+            judgeType, qualityId, recordId
+        } = this.state;
+
         if (selectedRowKeys.length === 0) {
             message.warning('请先选择要删除的数据！');
             return;
         }
 
-        // 确认删除
         Modal.confirm({
             title: '确认删除',
             content: `您确定要删除选中的 ${selectedRowKeys.length} 条数据吗？`,
             okText: '确认',
             cancelText: '取消',
             onOk: () => {
-                // 调用 DELETE 接口：直接传 id 数组（和接口封装的 body 要求匹配）
-                service.getDelete(selectedRowKeys).then(res => {
+                service.getDelete([selectedRowKeys]).then(res => {
                     if (res.rc === 0) {
                         message.success('批量删除成功！');
-                        // 刷新列表（携带当前筛选条件，保证列表状态一致）
                         this.getList({}, {
                             cycleType: this.state.cycleType,
                             machineId: this.state.machineId,
@@ -208,9 +214,13 @@ class standardStore extends React.Component {
                             speed: this.state.speed,
                             machineNo: this.state.machineNo,
                             pointId: this.state.pointId,
-                            detectorId: this.state.detectorId
+                            detectorId: this.state.detectorId,
+                            startTime: this.state.startTime,
+                            endTime: this.state.endTime,
+                            judgeType: this.state.judgeType,
+                            qualityId: this.state.qualityId,
+                            recordId: this.state.recordId
                         });
-                        // 清空选中状态，避免界面残留
                         this.setState({
                             selectedRowKeys: [],
                             detailDtoList: [],
@@ -221,7 +231,45 @@ class standardStore extends React.Component {
                     }
                 }).catch(err => {
                     message.error('删除请求出错，请重试！');
-                    console.error('批量删除失败：', err);
+                });
+            }
+        });
+    }
+
+    singleDelete = (record) => {
+        Modal.confirm({
+            title: '确认删除',
+            content: `您确定要删除这条记录（ID：${record.id}）吗？`,
+            okText: '确认',
+            cancelText: '取消',
+            onOk: () => {
+                service.getDelete([record.id]).then(res => {
+                    if (res.rc === 0) {
+                        message.success('删除成功！');
+                        this.getList({}, {
+                            cycleType: this.state.cycleType,
+                            machineId: this.state.machineId,
+                            receiverId: this.state.receiverId,
+                            speed: this.state.speed,
+                            machineNo: this.state.machineNo,
+                            pointId: this.state.pointId,
+                            detectorId: this.state.detectorId,
+                            startTime: this.state.startTime,
+                            endTime: this.state.endTime,
+                            judgeType: this.state.judgeType,
+                            qualityId: this.state.qualityId,
+                            recordId: this.state.recordId
+                        });
+                        this.setState({
+                            selectedRowKeys: [],
+                            detailDtoList: [],
+                            selectedRows: []
+                        });
+                    } else {
+                        message.error(`删除失败：${res.err}`);
+                    }
+                }).catch(err => {
+                    message.error('删除请求出错，请重试！');
                 });
             }
         });
@@ -252,7 +300,6 @@ class standardStore extends React.Component {
         })
     }
     disposeEcharts = () => {
-        // 解除ECharts联动
         if (typeof removeEchartsSync === 'function') {
             removeEchartsSync();
             removeEchartsSync = null;
@@ -281,7 +328,6 @@ class standardStore extends React.Component {
             tagVisible: false,
         })
 
-        // 解除全屏图表的联动（如果有）
         if (myEchartsFullScreen) {
             if (typeof removeEchartsSync === 'function') {
                 removeEchartsSync();
@@ -307,10 +353,15 @@ class standardStore extends React.Component {
     getList = (result, msg) => {
         this.disposeEcharts();
         this.setState({
-            standardLineVisible: false
+            standardLineVisible: false,
+            startTime: msg.startTime,
+            endTime: msg.endTime,
+            judgeType: msg.judgeType,
+            qualityId: msg.qualityId,
+            recordId: msg.recordId
         })
         const { cycleType, startTime, endTime, machineId, receiverId, speed, machineNo, pointId,
-            detectorId } = msg;
+            detectorId, judgeType, qualityId, recordId } = msg;
         let params = {
             ...msg
         }
@@ -334,7 +385,12 @@ class standardStore extends React.Component {
                         speed,
                         machineNo,
                         pointId,
-                        detectorId
+                        detectorId,
+                        startTime: msg.startTime,
+                        endTime: msg.endTime,
+                        judgeType: msg.judgeType,
+                        qualityId: msg.qualityId,
+                        recordId: msg.recordId
                     })
                 }
             } else {
@@ -824,11 +880,18 @@ class standardStore extends React.Component {
             moment(item.time).format('YYYY-MM-DD HH:mm')
         );
 
-        // 根据当前维度选择数据
         const seriesData = clickTrendData.map((item, index) => {
             const value = clickTrendDimension === 'db' ? item.db : item.density;
             return [index, value];
         });
+
+        let yMin = undefined;
+        let yMax = undefined;
+        if (clickTrendDimension === 'db') {
+            const yValues = seriesData.map(item => item[1]).filter(v => !isNaN(v));
+            yMin = 0
+            yMax = yValues.length ? Math.ceil(Math.max(...yValues) / 10) * 10 : 100; // 向上取整到10的倍数
+        }
 
         // 配置项根据维度切换
         const yAxisConfig = {
@@ -845,9 +908,19 @@ class standardStore extends React.Component {
         const option = {
             tooltip: {
                 trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#333',
+                        color: '#fff'
+                    },
+                    lineStyle: {
+                        width: 1,
+                        type: 'solid'
+                    }
+                },
                 formatter: (params) => {
                     const item = params[0];
-                    // 取原始数据的完整时间（到秒）
                     const originalTime = clickTrendData[item.data[0]].time;
                     const time = moment(originalTime).format('YYYY-MM-DD HH:mm:ss');
                     const value = clickTrendDimension === 'db'
@@ -857,7 +930,6 @@ class standardStore extends React.Component {
                     return `${time}<br/>${label}：${value}`;
                 }
             },
-            // 缩放配置（保留，但只缩放已有数据点）
             dataZoom: [
                 {
                     type: 'slider',
@@ -879,26 +951,23 @@ class standardStore extends React.Component {
                 name: '时间',
                 nameLocation: 'end',
                 nameGap: 15,
-                data: xAxisLabels, // 只绑定你的数据时间，无任何额外值
+                data: xAxisLabels,
                 axisLabel: {
-                    // 直接显示数据里的时间，不做任何额外处理
                     formatter: (value) => value,
                     rotate: 45,
                     margin: 15,
-                    // 核心：只显示第1、3、5...个数据的标签
                     interval: (index) => {
-                        // index就是数据的索引，0=第1个，2=第3个...
                         return index % 2 === 0;
                     },
-                    // 强制只显示数据范围内的标签，无多余
                     showMaxLabel: true,
                     showMinLabel: true,
                 },
-                boundaryGap: false, // 数据点紧贴X轴两端，无空白
-                // 关闭所有自动生成刻度的逻辑
+                boundaryGap: false,
                 axisTick: {
-                    // 只在有标签的位置显示刻度
                     interval: (index) => index % 2 === 0
+                },
+                axisPointer: {
+                    type: 'line'
                 }
             },
             yAxis: {
@@ -906,7 +975,21 @@ class standardStore extends React.Component {
                 name: yAxisConfig[clickTrendDimension].name,
                 nameLocation: 'end',
                 nameGap: 20,
-                nameTextStyle: { align: 'right' }
+                nameTextStyle: { align: 'right' },
+                min: clickTrendDimension === 'db' ? yMin : undefined,
+                max: clickTrendDimension === 'db' ? yMax : undefined,
+                interval: clickTrendDimension === 'db' ? 40 : undefined,
+                minInterval: clickTrendDimension === 'db' ? 40 : undefined,
+                axisLabel: {
+                    formatter: (value) => {
+                        return clickTrendDimension === 'db'
+                            ? value.toFixed(0)
+                            : value.toFixed(3);
+                    }
+                },
+                axisPointer: {
+                    type: 'line'
+                }
             },
             series: [
                 {
@@ -915,7 +998,6 @@ class standardStore extends React.Component {
                     data: seriesData,
                     smooth: true,
                     itemStyle: { color: '#1890ff' },
-                    // 关闭数据采样，确保每个点都渲染
                     sampling: 'none',
                     symbolSize: 2,
                 }
@@ -2474,11 +2556,13 @@ class standardStore extends React.Component {
                     <span>
                         < Button type='primary' ghost onClick={() => this.lookData(record, index)}> 曲线图 </Button>
                         {/* < span className = "ant-divider" />
-                        < Button onClick={()=>this.partCompareData(record,index)}> 分区声音比对 </Button> */}
+            < Button onClick={()=>this.partCompareData(record,index)}> 分区声音比对 </Button> */}
                         < span className="ant-divider" />
                         < Button onClick={() => this.playAudio(record, index)}> 播放 </Button>
                         < span className="ant-divider" />
                         < Button onClick={() => this.downloadFlie(record, index)}> 下载文件 </Button>
+                        < span className="ant-divider" />
+                        < Button type="primary" danger onClick={() => this.singleDelete(record)}> 删除 </Button>
                     </span>
                 ),
             }

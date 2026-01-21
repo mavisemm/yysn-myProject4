@@ -5,7 +5,7 @@ import { message } from 'antd';
 
 /**
  * 请求封装
- * 支持 Get 和 Post 请求
+ * 支持 Get、Post 和 Delete 请求
  */
 class Http {
     constructor(config) {
@@ -22,9 +22,9 @@ class Http {
         const { body = {}, extraHeader, header } = options;
         const { headers, extraQs = {} } = this.defaults;
         const postData = isObject(body)
-            ? pickBy(body, function(value) {
-                  return value !== '' && value !== undefined && value !== null;
-              })
+            ? pickBy(body, function (value) {
+                return value !== '' && value !== undefined && value !== null;
+            })
             : {};
 
         const config = {
@@ -54,14 +54,39 @@ class Http {
             data: body,
             type: 'post',
             dataType: 'json',
-            contentType: `${
-                isObject(body) ? 'application/x-www-form-urlencoded;' : 'application/json;'
-            }charset=UTF-8`,
+            contentType: `${isObject(body) ? 'application/x-www-form-urlencoded;' : 'application/json;'
+                }charset=UTF-8`,
             cache: false,
             headers: {
                 ...this._mergePeration(extraHeader),
             },
             ...options.config,
+        };
+        return this._request(config);
+    }
+
+    /**
+     * Delete 请求（新增方法）
+     * @param {string} url
+     * @param {object} options
+     */
+    delete(url, options) {
+        const { body, extraHeader } = options || {}; // 兼容无 options 的情况
+        const { headers } = this.defaults;
+        const config = {
+            url,
+            data: body, // delete 请求携带请求体
+            type: 'delete', // ajax 的 type 对应 HTTP 方法
+            dataType: 'json',
+            // 保持和 post 一致的 Content-Type 规则
+            contentType: `${isObject(body) ? 'application/x-www-form-urlencoded;' : 'application/json;'
+                }charset=UTF-8`,
+            cache: false,
+            headers: {
+                ...headers, // 继承全局 headers（tenantId、token 等）
+                ...this._mergePeration(extraHeader),
+            },
+            ...options?.config, // 可选的额外配置
         };
         return this._request(config);
     }
@@ -90,10 +115,10 @@ class Http {
         return new Promise((resolve, reject) => {
             $.ajax({
                 ...options,
-                success: function(response) {
+                success: function (response) {
                     resolve(response);
                 },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
                     reject(XMLHttpRequest, textStatus, errorThrown);
                 },
             });
@@ -157,7 +182,7 @@ const http = new Http({
         tenantId,
         Authorization: token ? `Bearer ${token}` : '',
     },
-    timeout:900000
+    timeout: 900000
 });
 
 export default http;
