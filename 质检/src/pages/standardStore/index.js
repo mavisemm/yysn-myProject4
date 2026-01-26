@@ -204,7 +204,7 @@ class standardStore extends React.Component {
             okText: '确认',
             cancelText: '取消',
             onOk: () => {
-                service.getDelete([selectedRowKeys]).then(res => {
+                service.getDelete(selectedRowKeys).then(res => {
                     if (res.rc === 0) {
                         message.success('批量删除成功！');
                         this.getList({}, {
@@ -638,7 +638,7 @@ class standardStore extends React.Component {
                     singleTotalArr = [];
                     let ret = res.ret.responseList || [];
                     let freqs = res.ret.freqs || [];
-                    XARR = freqs.map(item => (item.toFixed(0)));
+                    XARR = freqs.map(item => (item.toFixed(2)));
                     for (let i = 0; i < ret.length; i++) {
                         cycleList = cycleList.concat(ret[i].cycleList || []);
                         let dbArray = ret[i].dbArray || [];
@@ -863,164 +863,215 @@ class standardStore extends React.Component {
     }
 
     initClickTrendChart = () => {
-        // 销毁原有实例
-        if (this.myEchartsClickTrend) {
-            this.myEchartsClickTrend.dispose();
-            this.myEchartsClickTrend = null;
-        }
-
-        const chartDom = this.echartsBoxClickTrend;
-        if (!chartDom) return;
-
-        this.myEchartsClickTrend = echarts.init(chartDom);
-        const { clickTrendData, selectedFreq, clickTrendDimension } = this.state;
-
-        // 步骤1：预处理数据 - 根据维度选择对应数值
-        const xAxisLabels = clickTrendData.map(item =>
-            moment(item.time).format('YYYY-MM-DD HH:mm')
-        );
-
-        const seriesData = clickTrendData.map((item, index) => {
-            const value = clickTrendDimension === 'db' ? item.db : item.density;
-            return [index, value];
-        });
-
-        let yMin = undefined;
-        let yMax = undefined;
-        if (clickTrendDimension === 'db') {
-            const yValues = seriesData.map(item => item[1]).filter(v => !isNaN(v));
-            yMin = 0
-            yMax = yValues.length ? Math.ceil(Math.max(...yValues) / 10) * 10 : 100; // 向上取整到10的倍数
-        }
-
-        // 配置项根据维度切换
-        const yAxisConfig = {
-            db: {
-                name: '能量(dB)',
-                formatter: (value) => Number(value).toFixed(5) + 'dB'
-            },
-            density: {
-                name: '密度(%)',
-                formatter: (value) => Number(value).toFixed(3) + '%'
-            }
-        };
-
-        const option = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#333',
-                        color: '#fff'
-                    },
-                    lineStyle: {
-                        width: 1,
-                        type: 'solid'
-                    }
-                },
-                formatter: (params) => {
-                    const item = params[0];
-                    const originalTime = clickTrendData[item.data[0]].time;
-                    const time = moment(originalTime).format('YYYY-MM-DD HH:mm:ss');
-                    const value = clickTrendDimension === 'db'
-                        ? Number(item.data[1]).toFixed(5) + 'dB'
-                        : Number(item.data[1]).toFixed(3) + '%';
-                    const label = clickTrendDimension === 'db' ? '能量' : '密度';
-                    return `${time}<br/>${label}：${value}`;
-                }
-            },
-            dataZoom: [
-                {
-                    type: 'slider',
-                    xAxisIndex: 0,
-                    start: 0,
-                    end: 100,
-                    bottom: 10,
-                    zoomLock: false,
-                },
-                {
-                    type: 'inside',
-                    xAxisIndex: 0,
-                    zoomOnMouseWheel: true,
-                    moveOnMouseMove: true,
-                }
-            ],
-            xAxis: {
-                type: 'category',
-                name: '时间',
-                nameLocation: 'end',
-                nameGap: 15,
-                data: xAxisLabels,
-                axisLabel: {
-                    formatter: (value) => value,
-                    rotate: 45,
-                    margin: 15,
-                    interval: (index) => {
-                        return index % 2 === 0;
-                    },
-                    showMaxLabel: true,
-                    showMinLabel: true,
-                },
-                boundaryGap: false,
-                axisTick: {
-                    interval: (index) => index % 2 === 0
-                },
-                axisPointer: {
-                    type: 'line'
-                }
-            },
-            yAxis: {
-                type: 'value',
-                name: yAxisConfig[clickTrendDimension].name,
-                nameLocation: 'end',
-                nameGap: 20,
-                nameTextStyle: { align: 'right' },
-                min: clickTrendDimension === 'db' ? yMin : undefined,
-                max: clickTrendDimension === 'db' ? yMax : undefined,
-                interval: clickTrendDimension === 'db' ? 40 : undefined,
-                minInterval: clickTrendDimension === 'db' ? 40 : undefined,
-                axisLabel: {
-                    formatter: (value) => {
-                        return clickTrendDimension === 'db'
-                            ? value.toFixed(0)
-                            : value.toFixed(3);
-                    }
-                },
-                axisPointer: {
-                    type: 'line'
-                }
-            },
-            series: [
-                {
-                    name: yAxisConfig[clickTrendDimension].name,
-                    type: 'line',
-                    data: seriesData,
-                    smooth: true,
-                    itemStyle: { color: '#1890ff' },
-                    sampling: 'none',
-                    symbolSize: 2,
-                }
-            ],
-            grid: {
-                top: '15%',
-                right: '8%',
-                bottom: '20%',
-                left: '8%'
-            }
-        };
-
-        this.myEchartsClickTrend.setOption(option);
-
-        const resizeObserver = new ResizeObserver(() => {
-            this.myEchartsClickTrend?.resize();
-        });
-        resizeObserver.observe(chartDom);
-
-        window.addEventListener('resize', () => {
-            this.myEchartsClickTrend?.resize();
-        });
+    // 销毁原有实例
+    if (this.myEchartsClickTrend) {
+        this.myEchartsClickTrend.dispose();
+        this.myEchartsClickTrend = null;
     }
+
+    const chartDom = this.echartsBoxClickTrend;
+    if (!chartDom) return;
+
+    this.myEchartsClickTrend = echarts.init(chartDom);
+    const { clickTrendData, selectedFreq, clickTrendDimension } = this.state;
+
+    const xAxisLabels = clickTrendData.map(item =>
+        moment(item.time).format('YYYY-MM-DD HH:mm')
+    );
+
+    const seriesData = clickTrendData.map((item, index) => {
+        const value = clickTrendDimension === 'db' ? item.db : item.density;
+        return [index, value];
+    });
+
+    const yValues = seriesData.map(item => item[1]).filter(v => !isNaN(v) && v !== undefined);
+    const yInterval = clickTrendDimension === 'db' ? 20 : undefined; 
+    const padding = 40; 
+
+    let yMin = undefined;
+    let yMax = undefined;
+    let yMid = undefined;
+
+    if (clickTrendDimension === 'db' && yValues.length) {
+        const dataMin = Math.min(...yValues);
+        const dataMax = Math.max(...yValues);
+        
+        yMid = (dataMin + dataMax) / 2;
+
+        const roundedMin = Math.floor(dataMin / yInterval) * yInterval;
+        const roundedMax = Math.ceil(dataMax / yInterval) * yInterval;
+
+        yMin = Math.max(roundedMin - padding, 0);
+        yMax = roundedMax + padding;
+
+        if (yMin === yMax) {
+            yMin = Math.max(yMin - padding, 0);
+            yMax = yMax + padding;
+            yMid = (yMin + yMax) / 2; 
+        }
+    }
+
+    const yAxisConfig = {
+        db: {
+            name: '能量(dB)',
+            formatter: (value) => Number(value).toFixed(5) + 'dB'
+        },
+        density: {
+            name: '密度(%)',
+            formatter: (value) => Number(value).toFixed(3) + '%'
+        }
+    };
+
+    const option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#333',
+                    color: '#fff',
+                    margin: 10
+                },
+                lineStyle: {
+                    width: 1,
+                    type: 'solid'
+                }
+            },
+            position: (point, params, dom, rect, size) => {
+                const clickX = point[0];
+                const clickY = point[1];
+                
+                let currentValue = null;
+                if (params && params.length > 0) {
+                    currentValue = params[0].data[1]; 
+                }
+
+                const offsetUp = -150; 
+                const offsetDown = 30;
+                const horizontalOffset = 0;
+
+                let finalY = clickY;
+                if (currentValue !== null && !isNaN(currentValue) && yMid) {
+                    finalY = currentValue > yMid 
+                        ? clickY + offsetUp 
+                        : clickY + offsetDown;
+                } else {
+                    finalY = clickY + offsetDown;
+                }
+
+                const minY = 10; 
+                const maxY = size.viewSize[1] - 60;
+                finalY = Math.max(minY, Math.min(maxY, finalY));
+
+                return [clickX + horizontalOffset, finalY];
+            },
+            offset: [0, 0],
+            backgroundColor: 'rgba(50,50,50,0.95)',
+            borderColor: '#666',
+            borderWidth: 1,
+            padding: 10,
+            textStyle: {
+                fontSize: 12
+            },
+            formatter: (params) => {
+                const item = params[0];
+                const originalTime = clickTrendData[item.data[0]].time;
+                const time = moment(originalTime).format('YYYY-MM-DD HH:mm:ss');
+                const value = clickTrendDimension === 'db'
+                    ? Number(item.data[1]).toFixed(5) + 'dB'
+                    : Number(item.data[1]).toFixed(3) + '%';
+                const label = clickTrendDimension === 'db' ? '能量' : '密度';
+                return `${time}<br/>${label}：${value}`;
+            }
+        },
+        dataZoom: [
+            {
+                type: 'slider',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100,
+                bottom: 10,
+                zoomLock: false,
+            },
+            {
+                type: 'inside',
+                xAxisIndex: 0,
+                zoomOnMouseWheel: true,
+                moveOnMouseMove: true,
+            }
+        ],
+        xAxis: {
+            type: 'category',
+            name: '时间',
+            nameLocation: 'end',
+            nameGap: 15,
+            data: xAxisLabels,
+            axisLabel: {
+                formatter: (value) => value,
+                rotate: 45,
+                margin: 15,
+                interval: (index) => index % 2 === 0,
+                showMaxLabel: true,
+                showMinLabel: true,
+            },
+            boundaryGap: false,
+            axisTick: {
+                interval: (index) => index % 2 === 0
+            },
+            axisPointer: {
+                type: 'line'
+            }
+        },
+        yAxis: {
+            type: 'value',
+            name: yAxisConfig[clickTrendDimension].name,
+            nameLocation: 'end',
+            nameGap: 20,
+            nameTextStyle: { align: 'right' },
+            min: yMin,
+            max: yMax,
+            interval: yInterval,
+            axisLabel: {
+                formatter: (value) => {
+                    return clickTrendDimension === 'db'
+                        ? value.toFixed(0)
+                        : value.toFixed(3);
+                }
+            },
+            axisPointer: {
+                type: 'line'
+            }
+        },
+        series: [
+            {
+                name: yAxisConfig[clickTrendDimension].name,
+                type: 'line',
+                data: seriesData,
+                smooth: true,
+                itemStyle: { color: '#1890ff' },
+                sampling: 'none',
+                symbolSize: 2,
+            }
+        ],
+        grid: {
+            top: '15%',
+            right: '8%',
+            bottom: '20%',
+            left: '8%'
+        }
+    };
+
+    this.myEchartsClickTrend.setOption(option);
+
+    const resizeObserver = new ResizeObserver(() => {
+        this.myEchartsClickTrend?.resize();
+    });
+    resizeObserver.observe(chartDom);
+
+    window.addEventListener('resize', () => {
+        this.myEchartsClickTrend?.resize();
+    });
+}
 
     compareEchartsClick = (property) => {
         return function (a, b) {
@@ -1375,7 +1426,7 @@ class standardStore extends React.Component {
                     let densityArr = [];
                     let dbArr = [];
                     for (let i = 0; i < data.length; i++) {
-                        xArr.push(Math.sqrt(Number(data[i].freq1) * Number(data[i].freq2)).toFixed(0));
+                        xArr.push(Math.sqrt(Number(data[i].freq1) * Number(data[i].freq2)).toFixed(2));
                         densityArr.push(Number(data[i].density.toFixed(3)));
                         if (data[i].db == 0) {
                             dbArr.push(undefined);
@@ -2816,21 +2867,19 @@ class standardStore extends React.Component {
                                     <Button type='primary' onClick={() => this.chooseBox(1)}>全选</Button> :
                                     <Button type='primary' onClick={() => this.chooseBox(2)}>全不选</Button>
                             }
-                            {/* 新增批量删除按钮 - 仅选中数据时显示 */}
-                            {selectedRowKeys.length > 0 && (
-                                <Button
-                                    type='primary'
-                                    danger
-                                    onClick={this.batchDelete}
-                                    style={{ marginLeft: 10 }}
-                                >
-                                    批量删除
-                                </Button>
-                            )}
+
                             <Button style={{ backgroundColor: '#F21360', color: 'white', marginLeft: 10 }} onClick={() => this.lookEcharts()}>生成曲线图</Button>
                             <Switch checkedChildren="预览所选数据上下限" unCheckedChildren="关闭所选数据上下限" checked={this.state.switchAllShow} onChange={this.switchAllChange.bind(this)} />
                             {this.state.switchAllShow && <Button style={{ backgroundColor: 'green', color: 'white', marginLeft: 10 }} onClick={() => this.lookAllData()}>查看所选数据</Button>}
                             <Button type='primary' icon="download" disabled={disabled} onClick={() => { this.downAudioFile() }} style={{ marginLeft: 10 }}>批量下载录音文件</Button>
+                            <Button
+                                type='primary'
+                                danger
+                                onClick={this.batchDelete}
+                                style={{ marginLeft: 10 }}
+                            >
+                                批量删除
+                            </Button>
                         </BtnWrap>
                         <audio src={filePath} autoPlay controls style={{ width: 300, height: 30, marginLeft: 100 }}></audio>
                     </div>
@@ -2924,7 +2973,7 @@ class standardStore extends React.Component {
                         {/* 新增：ECharts容器 */}
                         <div
                             ref={(c) => { this.echartsBoxClickTrend = c; }}
-                            style={{ width: '100%', height: '500px' }}
+                            style={{ width: '100%', height: '550px' }}
                         />
                     </Modal>
 
