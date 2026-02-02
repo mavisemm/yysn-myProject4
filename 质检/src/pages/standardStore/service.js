@@ -116,6 +116,7 @@ export const service = (function (url) {
                 body: JSON.stringify(params),
             });
         },
+
     };
 })(`/jiepai/hardware/device`);
 

@@ -161,6 +161,9 @@ class standardStore extends React.Component {
             clickTrendDimension: 'db',
             startTime: '',
             endTime: '',
+            trendIntensityVisible: false,
+            trendIntensityData: [],
+            trendIntensityFreqs: [],
         }
     }
     componentDidMount() {
@@ -348,6 +351,329 @@ class standardStore extends React.Component {
             this.myEchartsClickTrend.dispose();
             this.myEchartsClickTrend = null;
         }
+        if (this.myEchartsTrendIntensity) {
+            this.myEchartsTrendIntensity.dispose();
+            this.myEchartsTrendIntensity = null;
+        }
+    }
+
+    // 关闭趋势强度模态框
+    handleCloseTrendIntensity = () => {
+        this.setState({
+            trendIntensityVisible: false
+        });
+        
+        if (this.myEchartsTrendIntensity) {
+            this.myEchartsTrendIntensity.dispose();
+            this.myEchartsTrendIntensity = null;
+        }
+        
+        // 清除resize监听
+        this.removeTrendIntensityResizeListener();
+    }
+
+    // 根据频率获取对应的zvalue
+    getZValueForFreq = (freq) => {
+        const { trendIntensityFreqs, trendIntensityData } = this.state;
+        
+        if (!trendIntensityFreqs || !trendIntensityData || 
+            trendIntensityFreqs.length === 0 || trendIntensityData.length === 0) {
+            return null;
+        }
+        
+        // 查找最接近的频率值
+        const index = trendIntensityFreqs.findIndex(f => {
+            // 考虑浮点数精度问题
+            return Math.abs(f - freq) < 0.01; // 频率差值小于0.01认为是同一个频率
+        });
+        
+        if (index !== -1 && index < trendIntensityData.length) {
+            return trendIntensityData[index];
+        }
+        
+        // 如果精确匹配不到，找最接近的频率
+        let closestIndex = 0;
+        let minDiff = Math.abs(trendIntensityFreqs[0] - freq);
+        
+        for (let i = 1; i < trendIntensityFreqs.length; i++) {
+            const diff = Math.abs(trendIntensityFreqs[i] - freq);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestIndex = i;
+            }
+        }
+        
+        if (closestIndex < trendIntensityData.length) {
+            return trendIntensityData[closestIndex];
+        }
+        
+        return null;
+    }
+    
+    // 显示趋势强度模态框
+    showTrendIntensity = () => {
+        // 获取趋势强度数据
+        this.fetchTrendIntensityData();
+        
+        this.setState({
+            trendIntensityVisible: true
+        }, () => {
+            // 确保模态框显示后再初始化图表
+            setTimeout(() => {
+                this.initTrendIntensityChart();
+            }, 100);
+        });
+    }
+
+    // 获取趋势强度数据
+    fetchTrendIntensityData = async () => {
+        try {
+            // 直接使用已保存的趋势强度数据
+            // 数据已经在点击"生成曲线图"时通过findSimpleFrequencyList接口获取并保存
+            
+            // 由于数据已经在生成曲线图时保存，直接初始化图表
+            // 不需要再次调用，因为在showTrendIntensity中会调用
+            
+        } catch (error) {
+            console.error('获取趋势强度数据出错:', error);
+            
+            // 如果出现问题，仍然尝试初始化图表（即使没有数据）
+            this.initTrendIntensityChart();
+        }
+    }
+
+    // 初始化趋势强度图表
+    initTrendIntensityChart = () => {
+        // 销毁原有实例
+        if (this.myEchartsTrendIntensity) {
+            this.myEchartsTrendIntensity.dispose();
+            this.myEchartsTrendIntensity = null;
+        }
+
+        const chartDom = this.echartsBoxTrendIntensity;
+        if (!chartDom) return;
+
+        this.myEchartsTrendIntensity = echarts.init(chartDom);
+        const { trendIntensityData, trendIntensityFreqs } = this.state;
+        
+        // 验证数据是否存在
+        if (!trendIntensityFreqs || !trendIntensityData || trendIntensityFreqs.length === 0 || trendIntensityData.length === 0) {
+            // 如果没有数据，显示空白图表或提示
+            const option = {
+                title: {
+                    text: '暂无数据',
+                    x: 'center',
+                    y: 'center',
+                    textStyle: {
+                        fontSize: 16,
+                        fontWeight: 'normal'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    name: '频率(Hz)',
+                    nameLocation: 'end',
+                    nameGap: 5,
+                    boundaryGap: false,
+                    axisLine: {
+                        onZero: false
+                    },
+                    axisLabel: {
+                        show: true,
+                        formatter: `{value}Hz`
+                    },
+                    interval: 'auto',
+                    data: [],
+                    splitLine: {
+                        show: false  // x轴不显示网格线
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Z值',
+                    nameLocation: 'end',
+                    nameGap: 5,
+                    splitLine: {
+                        show: true,  // 显示y轴网格线
+                        lineStyle: {
+                            color: '#e0e0e0',
+                            type: 'solid'
+                        }
+                    }
+                },
+                series: []
+            };
+                    
+            this.myEchartsTrendIntensity.setOption(option);
+                    
+            // 添加resize监听
+            window.addEventListener('resize', this.handleTrendIntensityResize);
+                    
+            return;
+        }
+
+        // 准备图表数据
+        const seriesData = trendIntensityFreqs.map((freq, index) => {
+            // 如果zvalue数组长度与freqs一致，则使用zvalue；否则使用默认值
+            const zvalue = index < trendIntensityData.length ? trendIntensityData[index] : 0;
+            return [freq, zvalue];
+        });
+
+        // 计算Y轴范围
+        const yValues = seriesData.map(item => item[1]).filter(v => !isNaN(v) && v !== undefined);
+        const padding = 40; 
+
+        let yMin = undefined;
+        let yMax = undefined;
+        let yMid = undefined;
+
+        if (yValues.length) {
+            const dataMin = Math.min(...yValues);
+            const dataMax = Math.max(...yValues);
+            
+            yMid = (dataMin + dataMax) / 2;
+
+            yMin = Math.max(dataMin - padding, 0);
+            yMax = dataMax + padding;
+
+            if (yMin === yMax) {
+                yMin = Math.max(yMin - padding, 0);
+                yMax = yMax + padding;
+                yMid = (yMin + yMax) / 2; 
+            }
+        }
+
+        // 图表选项
+        // 准备x轴数据（频率）和y轴数据（zvalue）分别用于category类型的x轴
+        const xAxisData = trendIntensityFreqs;
+        const yAxisData = trendIntensityData;
+        
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#333',
+                        color: '#fff',
+                        margin: 10
+                    },
+                    lineStyle: {
+                        width: 1,
+                        type: 'solid'
+                    }
+                },
+                position: (point, params, dom, rect, size) => {
+                    const clickX = point[0];
+                    const clickY = point[1];
+                    
+                    let currentValue = null;
+                    if (params && params.length > 0) {
+                        currentValue = params[0].data[1]; 
+                    }
+
+                    const offsetUp = -150; 
+                    const offsetDown = 30;
+                    const horizontalOffset = 0;
+
+                    let finalY = clickY;
+                    if (currentValue !== null && !isNaN(currentValue) && yMid) {
+                        finalY = currentValue > yMid 
+                            ? clickY + offsetUp 
+                            : clickY + offsetDown;
+                    } else {
+                        finalY = clickY + offsetDown;
+                    }
+                    
+                    return [horizontalOffset, finalY];
+                }
+            },
+            xAxis: {
+                type: 'category',
+                name: '频率(Hz)',
+                nameLocation: 'end',
+                nameGap: 5,
+                boundaryGap: false,
+                axisLine: {
+                    onZero: false
+                },
+                axisLabel: {
+                    show: true,
+                    formatter: `{value}Hz`
+                },
+                interval: 'auto',
+                data: xAxisData,
+                splitLine: {
+                    show: false  // x轴不显示网格线
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Z值',
+                nameLocation: 'end',
+                nameGap: 5,
+                splitLine: {
+                    show: true,  // 显示y轴网格线
+                    lineStyle: {
+                        color: '#e0e0e0',
+                        type: 'solid'
+                    }
+                }
+            },
+            dataZoom: [
+                {
+                    show: true,
+                    realtime: true,
+                    start: 0,
+                    end: 100,
+                    xAxisIndex: [0]
+                },
+                {
+                    type: 'inside',
+                    realtime: true,
+                    xAxisIndex: [0]
+                }
+            ],
+            series: [{
+                data: yAxisData,
+                type: 'line',
+                smooth: false,  // 显示为折线而非平滑曲线
+                symbolSize: 2,  // 减小圆圈大小
+                symbol: 'circle',
+                lineStyle: {
+                    width: 1
+                },
+                itemStyle: {
+                    color: '#5470c6'
+                },
+                label: {
+                    show: false,  // 不显示数据标签，避免过多数字干扰
+                    position: 'top',
+                    formatter: '{c}'  // 如果显示则显示原始值
+                }
+            }]
+        };
+
+        this.myEchartsTrendIntensity.setOption(option);
+        
+        // 添加resize监听
+        window.addEventListener('resize', this.handleTrendIntensityResize);
+    }
+    
+    // 处理趋势强度图表resize事件
+    handleTrendIntensityResize = () => {
+        if (this.myEchartsTrendIntensity) {
+            try {
+                this.myEchartsTrendIntensity.resize();
+            } catch (error) {
+                console.warn('ECharts resize error:', error);
+            }
+        }
+    }
+    
+    // 清除resize监听
+    removeTrendIntensityResizeListener = () => {
+        window.removeEventListener('resize', this.handleTrendIntensityResize);
     }
 
     getList = (result, msg) => {
@@ -638,7 +964,15 @@ class standardStore extends React.Component {
                     singleTotalArr = [];
                     let ret = res.ret.responseList || [];
                     let freqs = res.ret.freqs || [];
+                    let zvalues = res.ret.zvalue || [];
                     XARR = freqs.map(item => (item.toFixed(2)));
+                    
+                    // 保存趋势强度数据，供查看趋势强度时使用
+                    this.setState({
+                        trendIntensityFreqs: freqs,
+                        trendIntensityData: zvalues
+                    });
+                    
                     for (let i = 0; i < ret.length; i++) {
                         cycleList = cycleList.concat(ret[i].cycleList || []);
                         let dbArray = ret[i].dbArray || [];
@@ -2767,6 +3101,9 @@ class standardStore extends React.Component {
                         <Button type='primary' style={{ marginLeft: 10 }} onClick={() => {
                             this.lookFullScreen(2)
                         }}>全屏密度曲线</Button>
+                        <Button type='primary' style={{ marginLeft: 10 }} onClick={() => {
+                            this.showTrendIntensity()
+                        }}>查看趋势强度</Button>
                         <Switch checkedChildren="预览包络线" unCheckedChildren="关闭包络线" style={{ marginLeft: 10 }} checked={this.state.AvgLineShow} onChange={this.showAvgLine.bind(this)} />
                         <span style={{ color: 'red' }}>提示：数据量大时可以通过点击具体频率查看所选数据对应的能量、密度 </span>
                     </div>
@@ -2953,7 +3290,7 @@ class standardStore extends React.Component {
 
                     {/* 点击对应的坐标轴数据数值 */}
                     <Modal
-                        title={`频率 ${this.state.selectedFreq} Hz时${this.state.clickTrendDimension === 'db' ? '能量' : '密度'}趋势`}
+                        title={`频率 ${this.state.selectedFreq} Hz时${this.state.clickTrendDimension === 'db' ? '能量' : '密度'}趋势（趋势强度：${this.getZValueForFreq(this.state.selectedFreq) || 'N/A'}）`}
                         visible={this.state.clickChartVisible}
                         onOk={() => { this.handleClose() }}
                         onCancel={() => { this.handleClose() }}
@@ -2973,6 +3310,23 @@ class standardStore extends React.Component {
                         {/* 新增：ECharts容器 */}
                         <div
                             ref={(c) => { this.echartsBoxClickTrend = c; }}
+                            style={{ width: '100%', height: '550px' }}
+                        />
+                    </Modal>
+
+                    {/* 趋势强度模态框 */}
+                    <Modal
+                        title="趋势强度"
+                        visible={this.state.trendIntensityVisible}
+                        onOk={() => { this.handleCloseTrendIntensity() }}
+                        onCancel={() => { this.handleCloseTrendIntensity() }}
+                        width="80%" // 加宽弹窗，适配图表
+                        // 弹窗大小变化时，图表自适应
+                        onResize={() => this.initTrendIntensityChart()}
+                    >
+                        {/* 新增：ECharts容器 */}
+                        <div
+                            ref={(c) => { this.echartsBoxTrendIntensity = c; }}
                             style={{ width: '100%', height: '550px' }}
                         />
                     </Modal>
