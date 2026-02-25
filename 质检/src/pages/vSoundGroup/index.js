@@ -310,7 +310,7 @@ function vSoundGroup({ dispatch, vSoundGroup, loading }) {
             <div className="pageLayoutRight">
                 <div className="pageLayoutScroll">
                     <div className={styles.localFix}>
-                <Content top={28}>
+                <Content top={0}>
                     {/* <VtxGrid
                         titles={['听音组名称']}
                         gridweight={[2]}
