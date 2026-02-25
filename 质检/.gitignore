@@ -13,4 +13,9 @@
 # npm-debug.log*
 
 # *.lock
+# 构建输出
+dist/
+
+# 缓存
+.cache/
 
