@@ -242,7 +242,7 @@ class SearchPage extends React.Component {
                         defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                       }}
                         />
-                    <Select defaultValue='请选择机型' style={{marginLeft:"10px",width:'200px'}} onChange={this.chooseMachine.bind(this)} 
+                    <Select defaultValue='请选择机型' style={{marginLeft:"10px",width:'200px', marginTop: "10px"}} onChange={this.chooseMachine.bind(this)} 
                            filterOption={(input, option) => {
                             // 确保 children 是字符串，并且调用 toLowerCase()
                             const childrenStr = option.props.children.toString().toLowerCase();

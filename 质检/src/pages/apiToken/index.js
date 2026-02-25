@@ -17,6 +17,7 @@ import { handleColumns, VtxTimeUtil } from '@src/utils/util';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import SideBar from '@src/pages/sideBar';
+import styles from './apiToken.less';
 const namespace = 'apiToken';
 function apiToken({ dispatch, apiToken, loading }) {
     const {
@@ -124,7 +125,10 @@ function apiToken({ dispatch, apiToken, loading }) {
         indexTitle: '序号',
         indexColumn: true,
         startIndex: (currentPage - 1) * pageSize + 1,
-        autoFit: true,
+        // autoFit 在窗口 resize 时可能反复抬高表体 minHeight，导致页面“越拉越高”
+        autoFit: false,
+        // 列宽超出时在表格内部横向滚动，避免右侧溢出（尤其是最后一列）
+        scroll: { x: 'max-content' },
         // headFootHeight: 150,
         loading: loading.effects[`${namespace}/getList`],
         onChange(pagination, filters, sorter) {
@@ -294,14 +298,17 @@ function apiToken({ dispatch, apiToken, loading }) {
     };
 
     return (
-        < Page title = "接口授权设置">
+        < Page title = "接口授权设置" className="pageLayoutRoot">
              <SideBar parent={this}></SideBar>
-             <Page style={{width:'90%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+                    <div className={styles.localFix}>
                 <VtxGrid
-                    titles={['租户名称']}
+                    titles={['租户名称：']}
                     gridweight={[2]}
+                    colon={false}
                     confirm={vtxGridParams.query}
-                    clear={vtxGridParams.clear}
+                    clear={vtxGridParams.clear} 
                 >
                     <Input {...vtxGridParams.nameProps} />
                 </VtxGrid>
@@ -329,7 +336,9 @@ function apiToken({ dispatch, apiToken, loading }) {
                 {editItem.visible && <EditItem {...editItemProps} />}
                 {/*查看*/}
                 {viewItem.visible && <ViewItem {...viewItemProps} />}
-             </Page>
+                    </div>
+                </div>
+            </div>
         </Page>
     );
 }

@@ -541,7 +541,8 @@ class standardStoreHistory extends React.Component{
             pagination: false,
             size: 'default',
             // rowSelection: {},
-            scroll: undefined,
+            // 当列总宽度超过容器时，启用表格内部横向滚动条
+            scroll: { x: 'max-content' },
         }
         const columns = [
             {
@@ -651,9 +652,11 @@ class standardStoreHistory extends React.Component{
         ];
         const {machineList,pointList,historyList,speedList,total,machineId1,pointId1,name} = this.state;
     return (
-        <Page title='历史标准库管理'>
+        <Page title='历史标准库管理' className="pageLayoutRoot">
             < SideBar parent={this}></SideBar>
-            <div className={styles.body} style={{width:'90%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+            <div className={styles.body}>
                 <div style={{marginBottom:'20px',marginTop:'20px'}}>
                     <RangePicker onChange={this.dateChange.bind(this)} 
                         ranges={{
@@ -667,7 +670,7 @@ class standardStoreHistory extends React.Component{
                             defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                         }}
                     />
-                    <Select placeholder="请选择机型" style={{marginLeft:"10px",width:'200px'}} onChange={this.chooseMachine.bind(this)} 
+                    <Select placeholder="请选择机型" style={{marginLeft:"10px",width:'200px',marginTop:'10px'}} onChange={this.chooseMachine.bind(this)} 
                            filterOption={(input, option) => {
                             // 确保 children 是字符串，并且调用 toLowerCase()
                             const childrenStr = option.props.children.toString().toLowerCase();
@@ -682,7 +685,7 @@ class standardStoreHistory extends React.Component{
                             })
                         }
                     </Select>
-                    <Select placeholder="转速" style={{marginLeft:"10px",width:'60px'}} onChange={this.chooseSpeed.bind(this)} >
+                    <Select placeholder="转速" style={{marginLeft:"10px",width:'60px',marginTop:'10px'}} onChange={this.chooseSpeed.bind(this)} >
                         {
                             (speedList || []).map((item,index)=>{
                                 return (
@@ -691,11 +694,11 @@ class standardStoreHistory extends React.Component{
                             })
                         }
                     </Select>
-                    <Select placeholder="正反转" defaultValue="0"  style={{marginLeft:"10px",width:'60px'}} onChange={this.modeChange.bind(this)} >
+                    <Select placeholder="正反转" defaultValue="0"  style={{marginLeft:"10px",width:'60px',marginTop:'10px'}} onChange={this.modeChange.bind(this)} >
                       <Option value ='0' key='0'>正转</Option>
                       <Option value ='1' key='1'>反转</Option>
                     </Select>
-                    <Select placeholder="请选择点位" style={{ width: 120,marginLeft:10 }} onChange={this.pointChange.bind(this)} 
+                    <Select placeholder="请选择点位" style={{ width: 120,marginLeft:10,marginTop:'10px' }} onChange={this.pointChange.bind(this)} 
                            filterOption={(input, option) => {
                             // 确保 children 是字符串，并且调用 toLowerCase()
                             const childrenStr = option.props.children.toString().toLowerCase();
@@ -710,7 +713,7 @@ class standardStoreHistory extends React.Component{
                             })
                         }
                     </Select>
-                    <Button type = "primary"  style={{marginLeft:10}} onClick={()=>this.getList(1)}> 查询 </Button>
+                    <Button type = "primary"  style={{marginLeft:10,marginTop:'10px'}} onClick={()=>this.getList(1)}> 查询 </Button>
                 </div>
                 <Table rowKey='id' {...tableStyle} columns={columns} dataSource={historyList} />
                 <Pagination onChange={this.pageOnChange} showTotal={this.showTotal.bind(this)} total={total} style={{margin:'20px 0',textAlign:"right"}}/>
@@ -763,6 +766,8 @@ class standardStoreHistory extends React.Component{
                  
                 </Modal>
                 
+            </div>
+                </div>
             </div>
         </Page>
         

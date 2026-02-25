@@ -11,16 +11,19 @@
     transition: width 0.3s ease;
 }
 
+/* 有侧边栏的页面：右侧主区域占满、无整页滚动条 */
 body{
-    padding: 20px 10px;
+    margin: 0;
+    padding: 10px;
     box-sizing: border-box;
-
     position: relative;
-    top: 0;
-    left: 200px; /* 与侧边栏宽度一致 */
-    width: calc(100% - 200px); /* 动态计算宽度 */
-    min-height: 100%;
+    width: calc(100% - 200px);
+    height: 100%;
+    overflow: hidden;
+    left: 200px;
 }
+
+/* 布局类已移至 src/index.less，全局可用 */
 
 /* 侧边栏头部样式 */
 .sidebarHeader {

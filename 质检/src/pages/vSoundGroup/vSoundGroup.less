@@ -1,0 +1,15 @@
+.localFix {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    position: relative;
+
+    /* Content/TableWrap 默认 absolute，局部改为 relative，避免布局叠加异常 */
+    :global(.vtx_cont_item_a) {
+        position: relative !important;
+        top: 0 !important;
+        clear: both;
+    }
+}
+

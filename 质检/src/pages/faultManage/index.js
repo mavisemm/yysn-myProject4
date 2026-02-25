@@ -295,8 +295,10 @@ class faultManage extends React.Component {
     render(){
       const {faultName,btnType,faultList,currentIndex,qualityList,detailDto,faultIdList} = this.state;
       return (
-        <Page title='故障类型管理' style={{width:'90%'}}>
+        <Page title='故障类型管理' className="pageLayoutRoot" style={{width:'100%'}}>
             < SideBar parent = {this}></SideBar>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
             <div>
                 <div className={styles.tabletitle}>
                   <div className={styles.bd}></div>
@@ -406,6 +408,8 @@ class faultManage extends React.Component {
                     </Checkbox.Group>
                   </div>
                 </Modal>
+                </div>
+            </div>
                     
          </Page>
         );

@@ -357,7 +357,7 @@ class SearchPage extends React.Component {
                     <Select
                         value={defaultMachineName} // 显示选中的名称
                         placeholder='请选择机型'
-                        style={{ marginLeft: "10px", width: '200px' }}
+                        style={{ marginLeft: "10px", width: '200px', marginTop: "10px" }}
                         onChange={this.chooseMachine.bind(this)}
                         filterOption={(input, option) => {
                             const childrenStr = option.props.children.toString().toLowerCase();
@@ -379,7 +379,7 @@ class SearchPage extends React.Component {
                         <Select
                             value={speed || ''}
                             placeholder='转速'
-                            style={{ marginLeft: "10px", width: '60px' }}
+                            style={{ marginLeft: "10px", width: '60px', marginTop: "10px" }}
                             onChange={this.chooseSpeed.bind(this)}
                         >
                             <Option value={''} > 不限 </Option>
@@ -395,7 +395,7 @@ class SearchPage extends React.Component {
                     <Select
                         value="0"
                         placeholder="正反转"
-                        style={{ marginLeft: "10px", width: '60px' }}
+                        style={{ marginLeft: "10px", width: '60px',marginTop:'10px'}}
                         onChange={this.modeChange.bind(this)}
                     >
                         <Option value='0' key='0'>正转</Option>
@@ -405,7 +405,7 @@ class SearchPage extends React.Component {
                     {/* 设备编号 */}
                     <Input
                         addonBefore="设备编号："
-                        style={{ width: '250px', marginLeft: "10px" }}
+                        style={{ width: '250px', marginLeft: "10px",marginTop:'10px' }}
                         placeholder="请输入编号:"
                         value={machineNo}
                         name='machineNo'
@@ -416,7 +416,7 @@ class SearchPage extends React.Component {
                     <Select
                         value={defaultPointName} // 显示选中的名称
                         placeholder='请选择点位'
-                        style={{ width: 120, marginLeft: 10, outline: 'none' }}
+                        style={{ width: 120, marginLeft: 10, outline: 'none',marginTop:'10px' }}
                         onChange={this.pointChange.bind(this)}
                         filterOption={(input, option) => {
                             const childrenStr = option.props.children.toString().toLowerCase();
@@ -436,7 +436,7 @@ class SearchPage extends React.Component {
                     <Select
                         value={qualityId || ''}
                         placeholder='品质等级'
-                        style={{ width: 80, marginLeft: 10, outline: 'none' }}
+                        style={{ width: 80, marginLeft: 10, outline: 'none',marginTop:'10px' }}
                         onChange={this.qualityChange.bind(this)}
                     >
                         {
@@ -450,7 +450,7 @@ class SearchPage extends React.Component {
                     <Select
                         value={judgeType || "0"}
                         placeholder="标签"
-                        style={{ marginLeft: "10px", width: '80px' }}
+                        style={{ marginLeft: "10px", width: '80px',marginTop:'10px' }}
                         onChange={this.judgeChange.bind(this)}
                     >
                         <Option value='0' key='0'>所有标签</Option>
@@ -461,7 +461,7 @@ class SearchPage extends React.Component {
                     {/* 记录ID */}
                     <Input
                         addonBefore="记录id："
-                        style={{ width: '250px', marginLeft: "10px" }}
+                        style={{ width: '250px', marginLeft: "10px" ,marginTop:'10px'}}
                         placeholder="请输入id:"
                         value={recordId}
                         name='recordId'
@@ -469,8 +469,8 @@ class SearchPage extends React.Component {
                     />
 
                     {/* 查询按钮 */}
-                    <Button type="primary" style={{ marginLeft: 10 }} onClick={() => this.getList()}> 查询 </Button>
-                    <Button type="primary" style={{ marginLeft: 10 }} onClick={() => this.getImage()}> 查看机型点位分布 </Button>
+                    <Button type="primary" style={{ marginLeft: 10,marginTop:'10px' }} onClick={() => this.getList()}> 查询 </Button>
+                    <Button type="primary" style={{ marginLeft: 10,marginTop:'10px' }} onClick={() => this.getImage()}> 查看机型点位分布 </Button>
                 </div>
 
                 {/* 点位分布图弹窗 */}

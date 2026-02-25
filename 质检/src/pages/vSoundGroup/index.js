@@ -21,6 +21,7 @@ import { handleColumns, VtxTimeUtil } from '@src/utils/util';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import SideBar from '@src/pages/sideBar';
+import styles from './vSoundGroup.less';
 const namespace = 'vSoundGroup';
 function vSoundGroup({ dispatch, vSoundGroup, loading }) {
     const {
@@ -128,7 +129,10 @@ function vSoundGroup({ dispatch, vSoundGroup, loading }) {
         indexTitle: '序号',
         indexColumn: true,
         startIndex: (currentPage - 1) * pageSize + 1,
-        autoFit: true,
+        // autoFit 在窗口 resize 时可能反复抬高表体 minHeight，导致页面“越拉越高”
+        autoFit: false,
+        // 列宽超出时在表格内部横向滚动，避免右侧溢出（尤其是最后一列）
+        scroll: { x: 'max-content' },
         // headFootHeight: 150,
         loading: loading.effects[`${namespace}/getList`],
         onChange(pagination, filters, sorter) {
@@ -301,9 +305,11 @@ function vSoundGroup({ dispatch, vSoundGroup, loading }) {
     };
 
     return (
-        < Page title = "听音器组管理" >
+        < Page title = "听音器组管理" className="pageLayoutRoot">
             <SideBar parent={this}></SideBar>
-             <Page style={{width:'80%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+                    <div className={styles.localFix}>
                 <Content top={28}>
                     {/* <VtxGrid
                         titles={['听音组名称']}
@@ -336,7 +342,9 @@ function vSoundGroup({ dispatch, vSoundGroup, loading }) {
                     {editItem.visible && <EditItem {...editItemProps} />}
                     {/*查看*/}
             {viewItem.visible && <ViewItem {...viewItemProps} />}
-            </Page>
+                    </div>
+                </div>
+            </div>
 
         </Page>
     );

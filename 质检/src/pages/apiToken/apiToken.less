@@ -1,0 +1,36 @@
+.localFix {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    position: relative;
+
+    /* 查询区：避免 vtx-ui 默认 min-width 导致右侧溢出 */
+    :global(.vtx-ui-grid-normal) {
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 48px;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        box-sizing: border-box;
+    }
+
+    /* label / 冒号 / 输入框同一行（即使某些页面没关 colon 也不换行） */
+    :global(.vtx-ui-grid-lists) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+    :global(.vtx-ui-grid-lists .vtx-ui-grid-colon) {
+        position: static;
+        flex-shrink: 0;
+    }
+    :global(.vtx-ui-grid-lists .vtx-ui-grid-list) {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+    }
+}
+

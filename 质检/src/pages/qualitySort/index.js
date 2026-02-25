@@ -541,7 +541,8 @@ class QualitySort extends React.Component{
             },
             size: 'default',
             // rowSelection: {},
-            scroll: undefined,
+            // 当列总宽度超过容器时，启用表格内部横向滚动条
+            scroll: { x: 'max-content' },
         }
         const columns = [
             {
@@ -655,9 +656,11 @@ class QualitySort extends React.Component{
         } = this.state;
         
     return (
-        <Page title='质量排序'>
+        <Page title='质量排序' className="pageLayoutRoot">
             < SideBar parent={this}></SideBar>
-            <div className={styles.body} style={{width:'90%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+            <div className={styles.body}>
                 <SearchPage parent={this}></SearchPage>
                 {/* 能量密度 */}
                <div className={styles.frequencyWidth}>
@@ -689,9 +692,10 @@ class QualitySort extends React.Component{
                         <Button type='primary' onClick={()=>{
                             this.lookFullScreen(1)
                         }}>全屏能量曲线</Button>
-                        <Button type='primary' style={{marginLeft:10}} onClick={()=>{
+                        <Button type='primary' style={{marginLeft:10,marginTop:'10px'}} onClick={()=>{
                             this.lookFullScreen(2)
                         }}>全屏密度曲线</Button>
+                        <br/>
                          <span style={{color:'red'}}>提示：数据量大时可以通过点击具体频率查看所选数据对应的能量、密度 </span>
                     </BtnWrap>
                    
@@ -699,16 +703,16 @@ class QualitySort extends React.Component{
 
                 <div className={styles.frequencyWidth}>
                     <div className={styles.standStoreFlex}>
-                        <BtnWrap>
+                        <BtnWrap style={{marginTop:'-10px'}}>
                             <Button style={{backgroundColor:'#F21360',color:'white'}} onClick={()=>this.lookEcharts()}>生成曲线图</Button>
-                            <Button  onClick={()=>this.lookEcharts1()}>生成排序曲线图</Button>
+                            <Button style={{marginTop:'10px'}}  onClick={()=>this.lookEcharts1()}>生成排序曲线图</Button>
                         </BtnWrap>
                         <audio  src={filePath} autoPlay controls style={{width:300,height:30,marginLeft:100}}></audio>
                     </div>
                     <div>
-                        <Input addonBefore="分组数量" style={{width:'200px',marginLeft:10}} name='groupValue' placeholder="请输入" value={groupValue}
+                        <Input addonBefore="分组数量" style={{width:'200px',marginLeft:10,marginTop:'10px'}} name='groupValue' placeholder="请输入" value={groupValue}
                         onChange={this.inputChange.bind(this)}/>
-                        <Button type='primary' style={{marginLeft:10}} onClick={()=>this.errorsRank()}>开始排序</Button>
+                        <Button type='primary' style={{marginLeft:10,marginTop:'10px'}} onClick={()=>this.errorsRank()}>开始排序</Button>
                     </div>
                 </div>
                 
@@ -796,6 +800,8 @@ class QualitySort extends React.Component{
                 </Modal>  
           
                 
+            </div>
+                </div>
             </div>
         </Page>
         

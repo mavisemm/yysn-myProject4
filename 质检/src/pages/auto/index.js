@@ -1063,7 +1063,8 @@ class auto extends React.Component{
             },
             size: 'default',
             // rowSelection: {},
-            scroll: undefined,
+            // 当列总宽度超过容器时，启用表格内部横向滚动条
+            scroll: { x: 'max-content' },
         }
         const columns = [
             {
@@ -1180,9 +1181,11 @@ class auto extends React.Component{
         } = this.state;
         
     return (
-        <Page title='自动建标管理'>
+        <Page title='自动建标管理' className="pageLayoutRoot">
             < SideBar parent={this}></SideBar>
-            <div className={styles.body} style={{width:'90%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+            <div className={styles.body}>
                 <SearchPage parent={this}></SearchPage>
                 {/* 能量密度 */}
                <div className={styles.frequencyWidth}>
@@ -1214,9 +1217,10 @@ class auto extends React.Component{
                         <Button type='primary' onClick={()=>{
                             this.lookFullScreen(1)
                         }}>全屏能量曲线</Button>
-                        <Button type='primary' style={{marginLeft:10}} onClick={()=>{
+                        <Button type='primary' style={{marginLeft:10,marginTop:'10px'}} onClick={()=>{
                             this.lookFullScreen(2)
                         }}>全屏密度曲线</Button>
+                        <br/>
                          <span style={{color:'red'}}>提示：数据量大时可以通过点击具体频率查看所选数据对应的能量、密度 </span>
                     </BtnWrap>
                    
@@ -1224,19 +1228,20 @@ class auto extends React.Component{
 
                 <div className={styles.frequencyWidth}>
                     <div className={styles.standStoreFlex}>
-                        <BtnWrap>
+                        <BtnWrap style={{marginTop:'-10px'}}>
                             <Button style={{backgroundColor:'#F21360',color:'white'}} onClick={()=>this.lookEcharts()}>生成曲线图</Button>
-                            <Button  onClick={()=>this.lookEcharts1()}>生成数据集曲线图</Button>
-                            <Button  onClick={()=>this.check()}>校验数据</Button>
+                            <Button style={{marginTop:'10px'}}  onClick={()=>this.lookEcharts1()}>生成数据集曲线图</Button>
+                            <Button style={{marginTop:'10px'}}  onClick={()=>this.check()}>校验数据</Button>
                         </BtnWrap>
                         <audio  src={filePath} autoPlay controls style={{width:300,height:30,marginLeft:100}}></audio>
                     </div>
                     <div>
-                        <Input addonBefore="分组偏差值" style={{width:'200px',marginLeft:10}} name='groupValue' placeholder="请输入" value={groupValue}
+                        <Input addonBefore="分组偏差值" style={{width:'200px',marginLeft:10,marginTop:'10px'}} name='groupValue' placeholder="请输入" value={groupValue}
                         onChange={this.inputChange.bind(this)}/>
-                        <Button type='primary' style={{marginLeft:10}} onClick={()=>this.groupInit()}>开始聚类</Button>
-                        <Input addonBefore="OK件种类" disabled style={{width:'150px',marginLeft:10}} name='groupCount' placeholder="请输入" value={groupCount}
+                        <Button type='primary' style={{marginLeft:10,marginTop:'10px'}} onClick={()=>this.groupInit()}>开始聚类</Button>
+                        <Input addonBefore="OK件种类" disabled style={{width:'150px',marginLeft:10,marginTop:'10px'}} name='groupCount' placeholder="请输入" value={groupCount}
                         onChange={this.inputChange.bind(this)}/>
+                        <br/>
                         <span style={{color:'red',marginLeft:10}}>提示：聚类后，系统会自动生成相应数量的OK件种类，请根据实际情况调整OK件种类数量。</span>
                     </div>
                 </div>
@@ -1361,6 +1366,8 @@ class auto extends React.Component{
                         }
                 </Modal>  
                 
+            </div>
+                </div>
             </div>
         </Page>
         

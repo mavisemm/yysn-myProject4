@@ -243,7 +243,7 @@ class SearchPage extends React.Component {
                         defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                       }}
                         />
-                    <Select defaultValue='请选择机型' style={{marginLeft:"10px",width:'200px'}} onChange={this.chooseMachine.bind(this)} 
+                    <Select defaultValue='请选择机型' style={{marginLeft:"10px",width:'200px', marginTop: "10px"}} onChange={this.chooseMachine.bind(this)} 
                            filterOption={(input, option) => {
                             // 确保 children 是字符串，并且调用 toLowerCase()
                             const childrenStr = option.props.children.toString().toLowerCase();
@@ -259,7 +259,7 @@ class SearchPage extends React.Component {
                         }
                     </Select>
                     {
-                        speedList.length != 0 && <Select defaultValue='转速' style={{marginLeft:"10px",width:'60px'}} onChange={this.chooseSpeed.bind(this)} >
+                        speedList.length != 0 && <Select defaultValue='转速' style={{marginLeft:"10px",width:'60px', marginTop: "10px"}} onChange={this.chooseSpeed.bind(this)} >
                              <Option value ={''} > 不限 </Option>
                             {
                                 (speedList || []).map((item,index)=>{
@@ -271,11 +271,11 @@ class SearchPage extends React.Component {
                         </Select>
                     }
                  
-                    <Select placeholder="正反转" defaultValue="0"  style={{marginLeft:"10px",width:'60px'}} onChange={this.modeChange.bind(this)} >
+                    <Select placeholder="正反转" defaultValue="0"  style={{marginLeft:"10px",width:'60px', marginTop: "10px",marginBottom:'10px'}} onChange={this.modeChange.bind(this)} >
                       <Option value ='0' key='0'>正转</Option>
                       <Option value ='1' key='1'>反转</Option>
                     </Select>
-                    <Input addonBefore="请输入设备编号："  style={{width:'250px',marginLeft:"10px"}} placeholder="请输入编号:" value={machineNo} name='machineNo'
+                    <Input addonBefore="请输入设备编号："  style={{width:'250px',marginLeft:"10px", verticalAlign: 'middle'}} placeholder="请输入编号:" value={machineNo} name='machineNo'
                      onChange={this.inputChange.bind(this)} />
                 </div>
                   <div style={{marginBottom:"10px"}}>
@@ -295,7 +295,7 @@ class SearchPage extends React.Component {
                             })
                         }
                     </Select>
-                    <Select defaultValue='品质等级' style={{ width: 80,marginLeft:10, outline: 'none' }} onChange={this.qualityChange.bind(this)}>
+                    <Select defaultValue='品质等级' style={{ width: 80,marginLeft:10, outline: 'none',marginTop:'10px' }} onChange={this.qualityChange.bind(this)}>
                         {
                             (qualityList || []).map((item, index) => {
                                 return (
@@ -304,8 +304,8 @@ class SearchPage extends React.Component {
                             })
                         }
                     </Select>
-                    <Button type = "primary"  style={{marginLeft:10}} onClick={()=>this.getList()}> 查询 </Button>
-                    <Button type = "primary"  style={{marginLeft:10}} onClick={()=>this.getImage()}> 查看机型点位分布 </Button>
+                    <Button type = "primary"  style={{marginLeft:10,marginTop:'10px'}} onClick={()=>this.getList()}> 查询 </Button>
+                    <Button type = "primary"  style={{marginLeft:10,marginTop:'10px'}} onClick={()=>this.getImage()}> 查看机型点位分布 </Button>
                 </div>
 
                 

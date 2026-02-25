@@ -234,7 +234,7 @@ class SearchPage extends React.Component {
                         defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                       }}
                         />
-                    <Select defaultValue='请选择机型' style={{marginLeft:"10px",width:'200px'}} onChange={this.chooseMachine.bind(this)} >
+                    <Select defaultValue='请选择机型' style={{marginLeft:"10px",width:'200px', marginTop: "10px"}} onChange={this.chooseMachine.bind(this)} >
                         {
                             (machineList || []).map((item,index)=>{
                                 return (
@@ -244,7 +244,7 @@ class SearchPage extends React.Component {
                         }
                     </Select>
                     {
-                        speedList.length != 0 && <Select defaultValue='转速' style={{marginLeft:"10px",width:'60px'}} onChange={this.chooseSpeed.bind(this)} >
+                        speedList.length != 0 && <Select defaultValue='转速' style={{marginLeft:"10px",width:'60px', marginTop: "10px"}} onChange={this.chooseSpeed.bind(this)} >
                              <Option value ={''} > 不限 </Option>
                             {
                                 (speedList || []).map((item,index)=>{
@@ -256,7 +256,7 @@ class SearchPage extends React.Component {
                         </Select>
                     }
                  
-                    <Select placeholder="正反转" defaultValue="0"  style={{marginLeft:"10px",width:'60px'}} onChange={this.modeChange.bind(this)} >
+                    <Select placeholder="正反转" defaultValue="0"  style={{marginLeft:"10px",width:'60px', marginTop: "10px"}} onChange={this.modeChange.bind(this)} >
                       <Option value ='0' key='0'>正转</Option>
                       <Option value ='1' key='1'>反转</Option>
                     </Select>

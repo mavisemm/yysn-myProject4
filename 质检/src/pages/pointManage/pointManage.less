@@ -1,0 +1,36 @@
+/* 隐藏VtxGrid自动生成的冒号 */
+:global(.vtx-ui-grid-colon) {
+    display: none;
+}
+
+/* 防止标签文本省略 */
+:global(.vtx-ui-grid-label) {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+/* 设置搜索组件容器宽度 */
+:global(.ant-col-6) {
+    width: 250px !important;
+    max-width: 250px !important;
+}
+
+/* 防止按钮区域堆叠 */
+:global(.vtx-ui-grid-normal) {
+    height: auto !important;
+    min-height: 48px;
+}
+
+:global(.vtx_cont_item_a) {
+    position: relative !important;
+    top: 0 !important;
+    clear: both;
+}
+
+/* 确保按钮容器不会堆叠 */
+:global(.vtx_btn_wrap) {
+    position: relative;
+    margin-top: 10px;
+    z-index: 1;
+}

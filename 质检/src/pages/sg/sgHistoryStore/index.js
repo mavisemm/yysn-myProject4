@@ -236,8 +236,9 @@ function sgHistoryStore({ dispatch, sgHistoryStore, loading }) {
 	return (
 		<Page title="设备报警">
             <VtxGrid
-               titles={['开始时间','结束时间','报警类型', '报警对象','状态','设备名称']}
+               titles={['开始时间：','结束时间：','报警类型：', '报警对象：','状态：','设备名称：']}
                gridweight={[1, 1, 1, 1, 1,1]}
+               colon={false}
                confirm={vtxGridParams.query}
                clear={vtxGridParams.clear}
             >

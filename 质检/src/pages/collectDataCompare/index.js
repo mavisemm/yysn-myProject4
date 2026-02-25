@@ -734,7 +734,8 @@ class collectDataCompare extends React.Component {
             },
             size: 'default',
             // rowSelection: {},
-            scroll: undefined,
+            // 当列总宽度超过容器时，启用表格内部横向滚动条
+            scroll: { x: 'max-content' },
         }
         const columns = [
             {
@@ -834,8 +835,10 @@ class collectDataCompare extends React.Component {
     
         const {tableData,name,allCaculteData,partCompareList,start,end,compareTable } = this.state;
     return (
-        <Page title='采集数据点位对比管理'  style={{width:'90%'}}>
+        <Page title='采集数据点位对比管理' className="pageLayoutRoot" style={{width:'100%'}}>
             < SideBar parent={this}></SideBar>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
             <SearchPage parent={this}></SearchPage>
                 {/* 能量密度 */}
                <div className={styles.frequencyWidth}>
@@ -868,18 +871,19 @@ class collectDataCompare extends React.Component {
                     <Button type='primary' onClick={()=>{
                         this.lookFullScreen(1)
                 }}>全屏能量曲线</Button>
-                    <Button type='primary' style={{marginLeft:10}} onClick={()=>{
+                    <Button type='primary' style={{marginLeft:10,marginTop:'10px'}} onClick={()=>{
                     this.lookFullScreen(2)
                 }}>全屏密度曲线</Button>
+                <br/>
                     <span style={{color:'red',fontSize:16}}>提示：数据量大时可以通过点击具体频率查看所选数据对应的能量、密度 </span>
                 </div>
                 <BtnWrap>
                     {
                         selectedRowKeys.length == 0 ? <Button type='primary' onClick={()=>this.chooseBox(1)}>全选</Button> : <Button type='primary'  onClick={()=>this.chooseBox(2)}>全不选</Button>
                     }
-                    <Button style={{backgroundColor:'#F21360',color:'white'}} onClick={()=>this.lookEcharts()}>生成曲线图</Button>
-                    <Switch checkedChildren="预览所选数据上下限" unCheckedChildren="关闭所选数据上下限" checked={this.state.switchAllShow} onChange={this.switchAllChange.bind(this)}/>
-                    {this.state.switchAllShow && <Button style={{backgroundColor:'green',color:'white',marginLeft:10}} onClick={()=>this.lookAllData()}>查看所选数据</Button>}
+                    <Button style={{backgroundColor:'#F21360',color:'white',marginTop:'10px'}} onClick={()=>this.lookEcharts()}>生成曲线图</Button>
+                    <Switch style={{marginTop:'10px'}} checkedChildren="预览所选数据上下限" unCheckedChildren="关闭所选数据上下限" checked={this.state.switchAllShow} onChange={this.switchAllChange.bind(this)}/>
+                    {this.state.switchAllShow && <Button style={{backgroundColor:'green',color:'white',marginLeft:10,marginTop:'10px'}} onClick={()=>this.lookAllData()}>查看所选数据</Button>}
                 </BtnWrap>
                 <Table {...tableStyle} rowSelection={rowSelection} rowKey={record => record.index} columns={columns} dataSource={tableData} />
                 {/* 频率曲线图 */}
@@ -949,6 +953,8 @@ class collectDataCompare extends React.Component {
                     </Modal>  
                 
                 <BackTop />
+                </div>
+            </div>
              
         </Page>
         

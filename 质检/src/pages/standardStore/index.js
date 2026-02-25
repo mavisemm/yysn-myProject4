@@ -3063,9 +3063,11 @@ class standardStore extends React.Component {
             standardPartitionDtoList, partitionName, code, filePath, disabled
         } = this.state;
         return (
-            <Page title='标准库管理'>
+            <Page title='标准库管理' className="pageLayoutRoot">
                 < SideBar parent={this}></SideBar>
-                <div className={styles.body} style={{ width: '90%' }}>
+                <div className="pageLayoutRight">
+                    <div className="pageLayoutScroll">
+                <div className={styles.body}>
                     <SearchPage parent={this}></SearchPage>
                     {/* 能量密度 */}
                     <div className={styles.frequencyWidth}>
@@ -3098,13 +3100,14 @@ class standardStore extends React.Component {
                         <Button type='primary' onClick={() => {
                             this.lookFullScreen(1)
                         }}>全屏能量曲线</Button>
-                        <Button type='primary' style={{ marginLeft: 10 }} onClick={() => {
+                        <Button type='primary' style={{ marginLeft: 10,marginTop:'10px' }} onClick={() => {
                             this.lookFullScreen(2)
                         }}>全屏密度曲线</Button>
-                        <Button type='primary' style={{ marginLeft: 10 }} onClick={() => {
+                        <Button type='primary' style={{ marginLeft: 10,marginTop:'10px' }} onClick={() => {
                             this.showTrendIntensity()
                         }}>查看趋势强度</Button>
-                        <Switch checkedChildren="预览包络线" unCheckedChildren="关闭包络线" style={{ marginLeft: 10 }} checked={this.state.AvgLineShow} onChange={this.showAvgLine.bind(this)} />
+                        <Switch checkedChildren="预览包络线" unCheckedChildren="关闭包络线" style={{ marginLeft: 10,marginTop:'10px' }} checked={this.state.AvgLineShow} onChange={this.showAvgLine.bind(this)} />
+                        <br/>
                         <span style={{ color: 'red' }}>提示：数据量大时可以通过点击具体频率查看所选数据对应的能量、密度 </span>
                     </div>
 
@@ -3205,15 +3208,15 @@ class standardStore extends React.Component {
                                     <Button type='primary' onClick={() => this.chooseBox(2)}>全不选</Button>
                             }
 
-                            <Button style={{ backgroundColor: '#F21360', color: 'white', marginLeft: 10 }} onClick={() => this.lookEcharts()}>生成曲线图</Button>
-                            <Switch checkedChildren="预览所选数据上下限" unCheckedChildren="关闭所选数据上下限" checked={this.state.switchAllShow} onChange={this.switchAllChange.bind(this)} />
-                            {this.state.switchAllShow && <Button style={{ backgroundColor: 'green', color: 'white', marginLeft: 10 }} onClick={() => this.lookAllData()}>查看所选数据</Button>}
-                            <Button type='primary' icon="download" disabled={disabled} onClick={() => { this.downAudioFile() }} style={{ marginLeft: 10 }}>批量下载录音文件</Button>
+                            <Button style={{ backgroundColor: '#F21360', color: 'white', marginLeft: 10,marginTop:'10px'}} onClick={() => this.lookEcharts()}>生成曲线图</Button>
+                            <Switch style={{marginTop:'10px'}} checkedChildren="预览所选数据上下限" unCheckedChildren="关闭所选数据上下限" checked={this.state.switchAllShow} onChange={this.switchAllChange.bind(this)} />
+                            {this.state.switchAllShow && <Button style={{ backgroundColor: 'green', color: 'white', marginLeft: 10,marginTop:'10px' }} onClick={() => this.lookAllData()}>查看所选数据</Button>}
+                            <Button type='primary' icon="download" disabled={disabled} onClick={() => { this.downAudioFile() }} style={{ marginLeft: 10,marginTop:'10px' }}>批量下载录音文件</Button>
                             <Button
                                 type='primary'
                                 danger
                                 onClick={this.batchDelete}
-                                style={{ marginLeft: 10 }}
+                                style={{ marginLeft: 10,marginTop:'10px' }}
                             >
                                 批量删除
                             </Button>
@@ -3346,6 +3349,8 @@ class standardStore extends React.Component {
                         </ul>
                     </Modal>
 
+                </div>
+                    </div>
                 </div>
             </Page>
 

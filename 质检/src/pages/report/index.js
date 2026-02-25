@@ -505,10 +505,12 @@ class standardStore extends React.Component{
             filePath,customerName
         } = this.state;
     return (
-        <Page title='报告导出'>
+        <Page title='报告导出' className="pageLayoutRoot">
             {/* < SideBar parent={this}></SideBar>
             <div className={styles.body} style={{marginLeft:160,width:'90%'}}> */}
-            <div className={styles.body} style={{width:'90%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+            <div className={styles.body}>
             <div style={{marginLeft:10}}>
                 <div className={styles.typeflex}>
                     <div>客户名称：</div>
@@ -587,6 +589,8 @@ class standardStore extends React.Component{
                 </Modal>
 
              
+            </div>
+                </div>
             </div>
         </Page>
         

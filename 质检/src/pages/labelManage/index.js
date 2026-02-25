@@ -12,7 +12,7 @@ import NewItem from './components/Add';
 
 import EditItem from './components/Add';
 import ViewItem from './components/View';
-
+import styles from './labelManage.less';
 import { handleColumns, VtxTimeUtil } from '@src/utils/util';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
@@ -124,7 +124,10 @@ function labelManage({ dispatch, labelManage, loading }) {
         indexTitle: '序号',
         indexColumn: true,
         startIndex: (currentPage - 1) * pageSize + 1,
-        autoFit: true,
+        // autoFit 在窗口 resize 时可能反复抬高表体 minHeight，导致页面“越拉越高”
+        autoFit: false,
+        // 列宽超出时在表格内部横向滚动，避免右侧溢出（尤其是最后一列）
+        scroll: { x: 'max-content' },
         // headFootHeight: 150,
         loading: loading.effects[`${namespace}/getList`],
         onChange(pagination, filters, sorter) {
@@ -294,12 +297,15 @@ function labelManage({ dispatch, labelManage, loading }) {
     };
 
     return (
-        < Page title = "标签设置">
+        < Page title = "标签设置" className="pageLayoutRoot">
              <SideBar parent={this}></SideBar>
-             <Page style={{width:'90%'}}>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+                    <div className={styles.localFix}>
                 <VtxGrid
-                    titles={['标签名称']}
-                    gridweight={[2]}
+                    titles={['标签名称：']}
+                    gridweight={[1]}
+                    colon={false}
                     confirm={vtxGridParams.query}
                     clear={vtxGridParams.clear}
                 >
@@ -315,11 +321,13 @@ function labelManage({ dispatch, labelManage, loading }) {
                             icon="delete"
                             disabled={selectedRowKeys.length == 0}
                             onClick={deleteItems}
+                            style={{marginTop:'10px'}}
                         >
                             删除
                         </Button>
                     </BtnWrap>
-                    <TableWrap top={48}>
+                    
+                    <TableWrap top={80}>
                         <VtxDatagrid {...vtxDatagridProps} />
                     </TableWrap>
                 </Content>
@@ -329,7 +337,9 @@ function labelManage({ dispatch, labelManage, loading }) {
                 {editItem.visible && <EditItem {...editItemProps} />}
                 {/*查看*/}
                 {viewItem.visible && <ViewItem {...viewItemProps} />}
-             </Page>
+                    </div>
+                </div>
+            </div>
         </Page>
     );
 }

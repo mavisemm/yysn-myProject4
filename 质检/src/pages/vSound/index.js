@@ -21,6 +21,7 @@ import { handleColumns, VtxTimeUtil } from '@src/utils/util';
 import { vtxInfo } from '@src/utils/config';
 const { tenantId, userId, token } = vtxInfo;
 import SideBar from '@src/pages/sideBar';
+import styles from './vSound.less';
 const namespace = 'vSound';
 function vSound({ dispatch, vSound, loading }) {
     const {
@@ -132,7 +133,10 @@ function vSound({ dispatch, vSound, loading }) {
         indexTitle: '序号',
         indexColumn: true,
         startIndex: (currentPage - 1) * pageSize + 1,
-        autoFit: true,
+        // autoFit 在窗口 resize 时可能反复抬高表体 minHeight，导致页面“越拉越高”
+        autoFit: false,
+        // 列宽超出时在表格内部横向滚动，避免右侧溢出（尤其是最后一列）
+        scroll: { x: 'max-content' },
         // headFootHeight: 150,
         loading: loading.effects[`${namespace}/getList`],
         // onChange(pagination, filters, sorter) {
@@ -303,36 +307,41 @@ function vSound({ dispatch, vSound, loading }) {
     };
 
     return (
-        < Page title = "听音器及听筒设置"  style={{width:'90%'}}>
+        < Page title = "听音器及听筒设置" className="pageLayoutRoot">
             <SideBar parent={this}></SideBar>
-            <Page>
-                <VtxGrid
-                    titles={['听音器名称']}
-                    gridweight={[2]}
-                    confirm={vtxGridParams.query}
-                    clear={vtxGridParams.clear}
-                >
-                    <Input {...vtxGridParams.nameProps} />
-                </VtxGrid>
-                <Content top={48}>
-                    {/*按钮*/}
-                    <BtnWrap>
-                        <Button icon="file-add" onClick={() => updateNewWindow()}>
-                            新增
-                        </Button>
-                        <Button
-                            icon="delete"
-                            disabled={selectedRowKeys.length == 0}
-                            onClick={deleteItems}
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
+                    <div style={{ position: 'relative', height: '100%', minHeight: 0, width: '100%', minWidth: 0 }}>
+                        <VtxGrid
+                            titles={['听音器名称：']}
+                            gridweight={[1]}
+                            colon={false}
+                            confirm={vtxGridParams.query}
+                            clear={vtxGridParams.clear}
                         >
-                            删除
-                        </Button>
-                    </BtnWrap>
-                    <TableWrap top={48}>
-                        <VtxDatagrid {...vtxDatagridProps} />
-                    </TableWrap>
-                </Content>
-            </Page>
+                            <Input {...vtxGridParams.nameProps} />
+                        </VtxGrid>
+                        <Content top={48}>
+                            {/*按钮*/}
+                            <BtnWrap>
+                                <Button icon="file-add" onClick={() => updateNewWindow()}>
+                                    新增
+                                </Button>
+                                <Button
+                                    icon="delete"
+                                    disabled={selectedRowKeys.length == 0}
+                                    onClick={deleteItems}
+                                >
+                                    删除
+                                </Button>
+                            </BtnWrap>
+                            <TableWrap top={48}>
+                                <VtxDatagrid {...vtxDatagridProps} />
+                            </TableWrap>
+                        </Content>
+                    </div>
+                </div>
+            </div>
          
              {/*新增*/}
              {newItem.visible && <NewItem {...newItemProps} />}

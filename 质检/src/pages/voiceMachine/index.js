@@ -442,8 +442,10 @@ class voiceMachineModel extends React.Component {
           headThreshold,delayMs,extractDurationMs
       } = this.state;
       return (
-          < Page title = "机型管理"  style={{width:'90%'}}>
+          < Page title = "机型管理" className="pageLayoutRoot" style={{width:'100%'}}>
             <SideBar parent={this}></SideBar>
+            <div className="pageLayoutRight">
+                <div className="pageLayoutScroll">
             <div>
                 <div className={styles.headerStyles}>
                     <div className={styles.tabletitle}>
@@ -625,6 +627,8 @@ class voiceMachineModel extends React.Component {
                   <Input addonBefore="名称：" placeholder="请输入名称" style={{marginTop:10}} value={name}
                           onChange={this.inputChange.bind(this)} name='name'/> 
                 </Modal>
+                </div>
+            </div>
            </Page>
         );
     }

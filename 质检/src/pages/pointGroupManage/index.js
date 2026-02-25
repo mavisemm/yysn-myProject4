@@ -299,8 +299,9 @@ function pointGroupManage({ dispatch, pointGroupManage, loading }) {
     return (
         < Page title = "点位组设置" >
             <VtxGrid
-                titles={['点位组名称']}
+                titles={['点位组名称：']}
                 gridweight={[2]}
+                colon={false}
                 confirm={vtxGridParams.query}
                 clear={vtxGridParams.clear}
             >

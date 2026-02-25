@@ -464,9 +464,11 @@ class pointMap extends RouterComponent {
         };
 
         return (
-            <Page title="听筒点位管理">
+            <Page title="听筒点位管理" className="pageLayoutRoot">
                  < SideBar parent={this}></SideBar>
-                <div className={styles.body} style={{marginLeft:160,width:'90%'}}>
+                <div className="pageLayoutRight">
+                    <div className="pageLayoutScroll">
+                <div className={styles.body} style={{marginLeft:160}}>
                 {/* <div> */}
 
                     <BtnWrap>
@@ -546,6 +548,8 @@ class pointMap extends RouterComponent {
                                 )
                             })
                         }
+                    </div>
+                </div>
                     </div>
                 </div>
 

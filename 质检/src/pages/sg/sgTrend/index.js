@@ -1228,7 +1228,7 @@ class standardStore extends React.Component{
       
                  {
                     this.state.standardLineVisible ?  <div className={styles.standStoreTableFlex}>
-                        <div style={{width:'90%'}}></div>
+                        <div style={{width:'100%'}}></div>
                         <Button  style={{backgroundColor:'green',color:'white',margin:'0 auto'}} onClick={()=>this.saveStandardLine()}>保存</Button>
                     </div> : ''
                 }

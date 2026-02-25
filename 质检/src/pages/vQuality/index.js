@@ -208,8 +208,10 @@ class vQuality extends React.Component {
         ];
         const {tableData} = this.state;
         return (
-            <Page title='品质等级管理'>
+            <Page title='品质等级管理' className="pageLayoutRoot">
                  < SideBar parent = {this}></SideBar>
+                <div className="pageLayoutRight">
+                    <div className="pageLayoutScroll">
                 <div className={styles.body}>
                     <div style={{margin:'20px 0'}}>
                         <h3 style={{margin:'20px 0',fontWeight:600,fontSize:'20px'}}>品质等级划分依据：  <Button type='primary' style={{marginLeft:20}} onClick={()=>{this.submit()}}>提交</Button></h3>
@@ -218,6 +220,8 @@ class vQuality extends React.Component {
                     <Add parent={this}></Add>
                     <Table rowKey={record => record.id} columns={columns} dataSource={tableData} />
             
+                </div>
+                    </div>
                 </div>
             </Page>
 
