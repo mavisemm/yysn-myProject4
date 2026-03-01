@@ -95,7 +95,7 @@ class voiceIndex extends React.Component {
     }
     GoPage = () => {
         // 1. 定义两个环境的地址
-        const devUrl = 'http://192.168.1.33:8003/#/pointManage'; // 本地开发地址
+        const devUrl = 'http://localhost:8003/#/pointManage'; // 本地开发地址
         const prodUrl = 'http://122.224.196.178:8003/sound/#/pointManage'; // 线上地址
 
         // 2. 环境判断逻辑（双重保障，避免单一判断失效）
